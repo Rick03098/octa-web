@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    function isPremiumUser() {
+      return isSignedIn() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isPremium == true;
+    }
+    
+    function hasActiveSubscription() {
+      return isSignedIn() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.subscriptionStatus == 'active';
+    }
+    
+    // User profiles
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) && 
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isPremium', 'subscriptionStatus']));
+    }
+    
+    // User's Bazi analysis results
+    match /users/{userId}/bazi_analysis/{analysisId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+    
+    // User's floorplan analysis (Premium only)
+    match /users/{userId}/floorplan_analysis/{analysisId} {
+      allow read: if isOwner(userId) && isPremiumUser();
+      allow create: if isOwner(userId) && isPremiumUser();
+      allow update: if isOwner(userId) && isPremiumUser();
+      allow delete: if isOwner(userId) && isPremiumUser();
+    }
+    
+    // Subscription information (read-only from client)
+    match /subscriptions/{subscriptionId} {
+      allow read: if isSignedIn() && 
+        resource.data.userId == request.auth.uid;
+      allow write: if false; // Only backend can write
+    }
+    
+    // Public content (free tier)
+    match /public_content/{contentId} {
+      allow read: if true;
+      allow write: if false; // Admin only
+    }
+    
+    // Premium content
+    match /premium_content/{contentId} {
+      allow read: if isPremiumUser();
+      allow write: if false; // Admin only
+    }
+    
+    // Usage tracking (for rate limiting)
+    match /usage/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) && 
+        request.resource.data.count <= resource.data.count + 1;
+    }
+  }
+}

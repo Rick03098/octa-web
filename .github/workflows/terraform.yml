@@ -1,0 +1,274 @@
+name: 'Terraform Infrastructure'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform.yml'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+
+env:
+  OPENTOFU_VERSION: '1.6.0'
+  WORKING_DIR: './terraform'
+
+jobs:
+  terraform-check:
+    name: 'Terraform Check'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: ${{ env.OPENTOFU_VERSION }}
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    
+    - name: Terraform Format Check
+      run: tofu fmt -check -recursive
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Init
+      run: tofu init -backend=false
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Validate
+      run: tofu validate
+      working-directory: ${{ env.WORKING_DIR }}
+
+  terraform-plan:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+    needs: terraform-check
+    strategy:
+      matrix:
+        environment: [dev, staging, prod]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: ${{ env.OPENTOFU_VERSION }}
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    
+    - name: Terraform Init
+      run: |
+        tofu init \
+          -backend-config="bucket=${{ secrets.GCP_PROJECT_ID }}-terraform-state" \
+          -backend-config="prefix=terraform/state/${{ matrix.environment }}"
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Plan
+      run: |
+        tofu plan \
+          -var-file="environments/${{ matrix.environment }}/terraform.tfvars" \
+          -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
+          -out=${{ matrix.environment }}.tfplan
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Upload Plan
+      uses: actions/upload-artifact@v4
+      with:
+        name: tfplan-${{ matrix.environment }}
+        path: ${{ env.WORKING_DIR }}/${{ matrix.environment }}.tfplan
+
+  terraform-apply-dev:
+    name: 'Apply to Dev'
+    runs-on: ubuntu-latest
+    needs: terraform-plan
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: dev
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: ${{ env.OPENTOFU_VERSION }}
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    
+    - name: Download Plan
+      uses: actions/download-artifact@v4
+      with:
+        name: tfplan-dev
+        path: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Init
+      run: |
+        tofu init \
+          -backend-config="bucket=${{ secrets.GCP_PROJECT_ID }}-terraform-state" \
+          -backend-config="prefix=terraform/state/dev"
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Apply
+      run: tofu apply -auto-approve dev.tfplan
+      working-directory: ${{ env.WORKING_DIR }}
+
+  terraform-apply-staging:
+    name: 'Apply to Staging'
+    runs-on: ubuntu-latest
+    needs: terraform-apply-dev
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: staging
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: ${{ env.OPENTOFU_VERSION }}
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    
+    - name: Download Plan
+      uses: actions/download-artifact@v4
+      with:
+        name: tfplan-staging
+        path: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Init
+      run: |
+        tofu init \
+          -backend-config="bucket=${{ secrets.GCP_PROJECT_ID }}-terraform-state" \
+          -backend-config="prefix=terraform/state/staging"
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Apply
+      run: tofu apply -auto-approve staging.tfplan
+      working-directory: ${{ env.WORKING_DIR }}
+
+  terraform-apply-prod:
+    name: 'Apply to Production'
+    runs-on: ubuntu-latest
+    needs: terraform-apply-staging
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: ${{ env.OPENTOFU_VERSION }}
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    
+    - name: Download Plan
+      uses: actions/download-artifact@v4
+      with:
+        name: tfplan-prod
+        path: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Init
+      run: |
+        tofu init \
+          -backend-config="bucket=${{ secrets.GCP_PROJECT_ID }}-terraform-state" \
+          -backend-config="prefix=terraform/state/prod"
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Apply
+      run: tofu apply -auto-approve prod.tfplan
+      working-directory: ${{ env.WORKING_DIR }}
+
+  terraform-manual-apply:
+    name: 'Manual Apply'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    environment: ${{ github.event.inputs.environment }}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: ${{ env.OPENTOFU_VERSION }}
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    
+    - name: Terraform Init
+      run: |
+        tofu init \
+          -backend-config="bucket=${{ secrets.GCP_PROJECT_ID }}-terraform-state" \
+          -backend-config="prefix=terraform/state/${{ github.event.inputs.environment }}"
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Plan
+      run: |
+        tofu plan \
+          -var-file="environments/${{ github.event.inputs.environment }}/terraform.tfvars" \
+          -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
+          -out=${{ github.event.inputs.environment }}.tfplan
+      working-directory: ${{ env.WORKING_DIR }}
+    
+    - name: Terraform Apply
+      run: tofu apply -auto-approve ${{ github.event.inputs.environment }}.tfplan
+      working-directory: ${{ env.WORKING_DIR }}
