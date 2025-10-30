@@ -3,6 +3,10 @@ Prompts for workspace Feng Shui analysis.
 """
 from typing import Dict, Any
 from .base import MultiLanguagePromptManager, PromptTemplate
+from .structured_workspace_prompts import (
+    build_structured_workspace_prompts,
+    normalize_day_master_element,
+)
 
 
 class WorkspaceAnalysisPrompts(MultiLanguagePromptManager):
@@ -204,6 +208,9 @@ Return in JSON format:
             )
         }
 
+        # Build structured prompts by day master element (Chinese only for now)
+        self.element_prompts = build_structured_workspace_prompts()
+
     def get_workspace_analysis_prompt(
         self,
         bazi_data: Dict[str, Any],
@@ -248,3 +255,33 @@ Return in JSON format:
     def get_system_prompt(self, language: str = "zh") -> str:
         """Get the system prompt for workspace analysis."""
         return self.language_prompts[language]["system"].template
+
+    def get_structured_workspace_prompt(
+        self,
+        day_master_element: str,
+        desk_orientation: str,
+        workspace_photo: str,
+        user_gender: str,
+    ) -> str:
+        """
+        Get structured workspace prompt for specific day master element.
+
+        Args:
+            day_master_element: Five-element type of day master (wood/fire/earth/metal/water or 天干)
+            desk_orientation: User-provided facing direction
+            workspace_photo: Description or reference to the workspace photo
+            user_gender: Gender info (男/女/其他) for tailoring analysis
+
+        Returns:
+            Prompt string instructing model to output fixed JSON structure
+        """
+        normalized = normalize_day_master_element(day_master_element)
+        if normalized not in self.element_prompts:
+            raise ValueError(f"Unsupported day master element: {day_master_element}")
+
+        return self.element_prompts[normalized].format(
+            day_master_element=day_master_element,
+            desk_orientation=desk_orientation,
+            workspace_photo=workspace_photo,
+            user_gender=user_gender,
+        )
