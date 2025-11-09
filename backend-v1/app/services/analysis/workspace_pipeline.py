@@ -11,7 +11,7 @@ from app.models.analysis import (
     FengShuiRecommendation,
     JobStatus
 )
-from app.services.bazi_service import BaziService
+from app.services.bazi_sevice_revised import BaziService
 from app.prompts.workspace_prompts import WorkspaceAnalysisPrompts
 from app.core.logging import get_logger
 from app.utils.ids import generate_prefixed_id

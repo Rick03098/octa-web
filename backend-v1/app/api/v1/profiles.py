@@ -13,7 +13,7 @@ from app.models.profiles import (
     UpdateBaziProfileRequest,
     BaziFourSentencesResponse,
 )
-from app.services.bazi_service import BaziService
+from app.services.bazi_sevice_revised import BaziService
 from app.services.four_sentences_service import build_four_sentences
 from app.core.errors import NotFoundError, ValidationError, ConflictError
 from app.core.logging import get_logger

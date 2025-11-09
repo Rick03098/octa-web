@@ -4,7 +4,7 @@ Bazi profiles management service.
 from typing import List, Optional
 from datetime import datetime, timedelta
 
-from app.services.bazi_service import BaziService
+from app.services.bazi_sevice_revised import BaziService
 from app.models.profiles import (
     CreateBaziProfileRequest,
     BaziProfile,

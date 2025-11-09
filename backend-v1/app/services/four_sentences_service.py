@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Dict, Tuple
 
 from app.models.profiles import BaziChart
-from app.services.bazi_service import GAN_TO_ELEMENT
+from app.services.bazi_sevice_revised import GAN_TO_ELEMENT
 from app.services.four_mapping import get_four_sentences
 
 # Branch hidden stems with weights
