@@ -104,5 +104,8 @@ class UpdateBaziProfileRequest(BaseModel):
 class BaziFourSentencesResponse(BaseModel):
     """Response model for four-sentence narrative output."""
     day_pillar: str
-    strength_label: str
-    sentences: Dict[str, str]
+    strength_label: str  # 身强身弱
+    sentences: Dict[str, str]  # Keys: "纳音" -> "naYin", "舒适区" -> "comfortZone",
+                               # "能量来源" -> "energySource", "相冲能量" -> "conflictEnergy"
+    # 句子回收格式和sentences一致，但是前端会用其他变量进行接受和转化（维护映射）
+
