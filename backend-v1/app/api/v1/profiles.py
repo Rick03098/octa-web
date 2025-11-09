@@ -1,7 +1,7 @@
 """
 Bazi profile management API endpoints.
 """
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 from fastapi import APIRouter, Depends, status, HTTPException
 from datetime import datetime, time
 
@@ -10,9 +10,11 @@ from app.models.auth import UserSession
 from app.models.profiles import (
     CreateBaziProfileRequest,
     BaziProfileResponse,
-    UpdateBaziProfileRequest
+    UpdateBaziProfileRequest,
+    BaziFourSentencesResponse,
 )
 from app.services.bazi_service import BaziService
+from app.services.four_sentences_service import build_four_sentences
 from app.core.errors import NotFoundError, ValidationError, ConflictError
 from app.core.logging import get_logger
 from app.utils.ids import generate_prefixed_id
@@ -43,44 +45,7 @@ async def create_bazi_profile(
 
     # Calculate Bazi chart
     try:
-        # Combine date and time for birth_time parameter
-        birth_datetime = None
-        longitude = None
-
-        # TODO: Extract longitude from birth_location
-        # This would typically involve geocoding the location
-        # For now, we'll use a default longitude based on common locations
-        location_to_lon = {
-            "beijing": 116.4,
-            "shanghai": 121.5,
-            "singapore": 103.8,
-            "new york": -74.0,
-            "london": -0.13
-        }
-
-        location_lower = request.birth_location.lower()
-        for loc, lon in location_to_lon.items():
-            if loc in location_lower:
-                longitude = lon
-                break
-
-        if request.birth_time:
-            birth_datetime = datetime.combine(request.birth_date, request.birth_time)
-
-        # Calculate Bazi chart
-        chart = bazi_service.calculate_bazi_chart(
-            birth_date=request.birth_date,
-            birth_time=birth_datetime if birth_datetime else None,
-            longitude=longitude
-        )
-
-        # Analyze lucky elements
-        lucky_elements, unlucky_elements = bazi_service.analyze_lucky_elements(chart)
-
-        # Get lucky directions and colors
-        lucky_directions = bazi_service.get_lucky_directions(lucky_elements)
-        lucky_colors = bazi_service.get_lucky_colors(lucky_elements)
-
+        chart, lucky_elements, unlucky_elements, lucky_directions, lucky_colors = _calculate_chart_metadata(request)
     except Exception as e:
         logger.error(f"Bazi calculation failed: {e}")
         raise ValidationError(f"Failed to calculate Bazi: {str(e)}")
@@ -243,3 +208,68 @@ async def activate_bazi_profile(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
         detail="Multi-profile support not yet implemented"
     )
+
+
+@router.post("/bazi/four_sentences", response_model=BaziFourSentencesResponse)
+async def generate_four_sentences(
+    request: CreateBaziProfileRequest,
+    current_user: Annotated[UserSession, Depends(get_current_verified_user)]
+):
+    """
+    Generate the four-sentence narrative block for a given BaZi input.
+
+    Args:
+        request: BaZi profile payload (birth info + gender)
+
+    Returns:
+        The day pillar, strength label, and four narrative sentences
+    """
+    try:
+        chart, *_ = _calculate_chart_metadata(request)
+    except Exception as e:
+        logger.error(f"Four-sentences calculation failed: {e}")
+        raise ValidationError(f"Failed to calculate four sentences: {str(e)}")
+
+    day_pillar, strength_label, sentences = build_four_sentences(chart)
+
+    return BaziFourSentencesResponse(
+        day_pillar=day_pillar,
+        strength_label=strength_label,
+        sentences=sentences
+    )
+
+
+def _calculate_chart_metadata(request: CreateBaziProfileRequest):
+    """Reuse BaZi计算逻辑以便在多个端点生成同一份数据。"""
+    birth_datetime = datetime.combine(request.birth_date, request.birth_time) if request.birth_time else None
+    longitude = _infer_longitude(request.birth_location)
+
+    chart = bazi_service.calculate_bazi_chart(
+        birth_date=request.birth_date,
+        birth_time=birth_datetime if birth_datetime else None,
+        longitude=longitude
+    )
+
+    lucky_elements, unlucky_elements = bazi_service.analyze_lucky_elements(chart)
+    lucky_directions = bazi_service.get_lucky_directions(lucky_elements)
+    lucky_colors = bazi_service.get_lucky_colors(lucky_elements)
+    return chart, lucky_elements, unlucky_elements, lucky_directions, lucky_colors
+
+
+def _infer_longitude(birth_location: str) -> Optional[float]:
+    """Very lightweight geo fallback until正式 geocoding 接入。"""
+    location_to_lon = {
+        "beijing": 116.4,
+        "shanghai": 121.5,
+        "singapore": 103.8,
+        "new york": -74.0,
+        "london": -0.13,
+        "hong kong": 114.1,
+        "taipei": 121.5,
+        "tokyo": 139.7,
+    }
+    location_lower = birth_location.lower()
+    for loc, lon in location_to_lon.items():
+        if loc in location_lower:
+            return lon
+    return None

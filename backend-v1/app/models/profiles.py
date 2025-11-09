@@ -99,3 +99,10 @@ class UpdateBaziProfileRequest(BaseModel):
     """Update Bazi profile request (limited fields)."""
     name: Optional[str] = Field(None, max_length=100)
     is_active: Optional[bool] = None
+
+
+class BaziFourSentencesResponse(BaseModel):
+    """Response model for four-sentence narrative output."""
+    day_pillar: str
+    strength_label: str
+    sentences: Dict[str, str]
