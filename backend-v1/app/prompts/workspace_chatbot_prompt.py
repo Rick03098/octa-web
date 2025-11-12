@@ -1,5 +1,7 @@
 # chatbot基本信息 (speckit version)
 # user和对应的信息/订阅存在Firestore中，chat和user解耦
+# 需要的信息：报告report具体内容，用户档案profile，系统指令，短期记忆和压缩记忆
+# To Ricky：可以根据算法需求去进行二轮适配，所以本页可以随意改动
 
 # Text Prompt (Modal) for Workspace Chatbot
 workspace_chatbot_system_instruction = {
@@ -28,3 +30,4 @@ long_term_memory = ""  # 为speckit预留
 
 # Multimodal Prompt (Modal) for Workspace
 # 为下次功能开发（因为图片输入需要一些问题预设，暂时会没办法）
+# Question 1 示例：我的东西（拍摄图片）应该改动在哪里？
