@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct BirthdayInputView: View {
     @ObservedObject var controller: BirthdayInputController
@@ -34,12 +35,15 @@ struct BirthdayInputView: View {
                     .foregroundStyle(.white)
 
                 pickerStack
-                    .padding(.horizontal, -8)
                     .padding(.top, 8)
                     .overlay(alignment: .center) {
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(Color.white.opacity(0.12))
-                            .frame(height: 52)
+                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    .fill(Color.white.opacity(0.1))
+                            )
+                            .frame(height: BirthdayPickerLayout.highlightHeight)
                     }
 
                 Spacer()
@@ -63,55 +67,70 @@ struct BirthdayInputView: View {
     }
 
     private var pickerStack: some View {
-        HStack(spacing: 12) {
-            pickerColumn(
-                values: controller.state.years,
-                selection: Binding(
-                    get: { controller.state.year },
-                    set: controller.updateYear
-                ),
-                labelSuffix: "年"
-            )
+        GeometryReader { geo in
+            let spacing = BirthdayPickerLayout.columnSpacing
+            let availableWidth = max(0, geo.size.width - spacing * 2)
+            let yearWidth = availableWidth * BirthdayPickerLayout.yearWidthRatio
+            let monthDayWidth = availableWidth * BirthdayPickerLayout.monthDayWidthRatio
 
-            pickerColumn(
-                values: controller.state.months,
-                selection: Binding(
-                    get: { controller.state.month },
-                    set: controller.updateMonth
-                ),
-                labelSuffix: "月"
-            )
+            HStack(spacing: spacing) {
+                pickerColumn(
+                    values: controller.state.years,
+                    selection: Binding(
+                        get: { controller.state.year },
+                        set: controller.updateYear
+                    ),
+                    labelSuffix: "年"
+                )
+                .frame(width: yearWidth)
 
-            pickerColumn(
-                values: controller.state.days,
-                selection: Binding(
-                    get: { controller.state.day },
-                    set: controller.updateDay
-                ),
-                labelSuffix: "日"
-            )
+                pickerColumn(
+                    values: controller.state.months,
+                    selection: Binding(
+                        get: { controller.state.month },
+                        set: controller.updateMonth
+                    ),
+                    labelSuffix: "月"
+                )
+                .frame(width: monthDayWidth)
+
+                pickerColumn(
+                    values: controller.state.days,
+                    selection: Binding(
+                        get: { controller.state.day },
+                        set: controller.updateDay
+                    ),
+                    labelSuffix: "日"
+                )
+                .frame(width: monthDayWidth)
+            }
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
         }
+        .frame(height: BirthdayPickerLayout.pickerHeight)
     }
 
     private func pickerColumn(values: [Int], selection: Binding<Int>, labelSuffix: String) -> some View {
-        VStack {
-            Picker("", selection: selection) {
-                ForEach(values, id: \.self) { value in
-                    Text("\(value)\(labelSuffix)")
-                        .font(DSFonts.serifRegular(18))
-                        .foregroundStyle(Color.black)
-                }
+        Picker("", selection: selection) {
+            ForEach(values, id: \.self) { value in
+                Text("\(value)\(labelSuffix)")
+                    .font(DSFonts.serifRegular(18))
+                    .foregroundStyle(Color.black)
             }
-            .pickerStyle(.wheel)
-            .frame(maxWidth: .infinity)
-            .frame(height: 180)
-            .clipped()
         }
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white.opacity(0.8))
-        )
+        .labelsHidden()
+        .pickerStyle(.wheel)
+        .frame(maxWidth: .infinity)
+        .frame(height: BirthdayPickerLayout.pickerHeight)
+        .clipped()
     }
+}
+
+private enum BirthdayPickerLayout {
+    static let columnSpacing: CGFloat = 12
+    static let yearWidthRatio: CGFloat = 0.44
+    static let monthDayWidthRatio: CGFloat = (1 - yearWidthRatio) / 2
+    static let pickerHeight: CGFloat = 200
+    static let highlightHeight: CGFloat = 56
 }
 
 #Preview {

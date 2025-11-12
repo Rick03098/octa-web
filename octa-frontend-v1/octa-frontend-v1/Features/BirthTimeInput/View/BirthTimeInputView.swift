@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct BirthTimeInputView: View {
     @ObservedObject var controller: BirthTimeInputController
@@ -60,11 +61,17 @@ struct BirthTimeInputView: View {
                     .lineSpacing(8)
                     .shadow(color: Color.black.opacity(0.15), radius: 8, y: 6)
 
-                summaryChips
-
                 pickerStack
-                    .padding(.horizontal, -8)
                     .padding(.top, 8)
+                    .overlay(alignment: .center) {
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    .fill(Color.white.opacity(0.12))
+                            )
+                            .frame(height: BirthTimePickerLayout.highlightHeight)
+                    }
 
                 Text(DSStrings.BirthTime.hint)
                     .font(DSFonts.serifRegular(13))
@@ -90,96 +97,73 @@ struct BirthTimeInputView: View {
         }
     }
 
-    private var summaryChips: some View {
-        let summary = controller.state.summaryTexts
-        return HStack(spacing: 16) {
-            summaryChip(text: summary.0)
-            summaryChip(text: summary.1)
-            summaryChip(text: summary.2)
-        }
-    }
-
-    private func summaryChip(text: String) -> some View {
-        RoundedRectangle(cornerRadius: 20, style: .continuous)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color.white,
-                        Color(red: 0.97, green: 0.96, blue: 0.94)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            .frame(height: 48)
-            .overlay(
-                Text(text)
-                    .font(DSFonts.serifMedium(18))
-                    .foregroundStyle(Color.black)
-            )
-            .shadow(color: Color.black.opacity(0.08), radius: 10, y: 6)
-    }
-
     private var pickerStack: some View {
-        HStack(spacing: 12) {
-            pickerColumn(
-                values: controller.state.hours,
-                selection: Binding(
-                    get: { controller.state.hour },
-                    set: controller.updateHour
-                ),
-                formatter: { "\($0)点" }
-            )
+        GeometryReader { geo in
+            let spacing = BirthTimePickerLayout.columnSpacing
+            let availableWidth = max(0, geo.size.width - spacing * 2)
+            let hourWidth = availableWidth * BirthTimePickerLayout.hourWidthRatio
+            let minuteWidth = availableWidth * BirthTimePickerLayout.minuteWidthRatio
+            let periodWidth = availableWidth * BirthTimePickerLayout.periodWidthRatio
 
-            pickerColumn(
-                values: controller.state.minutes,
-                selection: Binding(
-                    get: { controller.state.minute },
-                    set: controller.updateMinute
-                ),
-                formatter: { String(format: "%02d分", $0) }
-            )
+            HStack(spacing: spacing) {
+                pickerColumn(
+                    values: controller.state.hours,
+                    selection: Binding(
+                        get: { controller.state.hour },
+                        set: controller.updateHour
+                    ),
+                    formatter: { "\($0)点" }
+                )
+                .frame(width: hourWidth)
 
-            pickerColumn(
-                values: controller.state.periods,
-                selection: Binding(
-                    get: { controller.state.period },
-                    set: controller.updatePeriod
-                ),
-                formatter: { $0 == .am ? "上午" : "下午" }
-            )
+                pickerColumn(
+                    values: controller.state.minutes,
+                    selection: Binding(
+                        get: { controller.state.minute },
+                        set: controller.updateMinute
+                    ),
+                    formatter: { String(format: "%02d分", $0) }
+                )
+                .frame(width: minuteWidth)
+
+                pickerColumn(
+                    values: controller.state.periods,
+                    selection: Binding(
+                        get: { controller.state.period },
+                        set: controller.updatePeriod
+                    ),
+                    formatter: { $0 == .am ? "上午" : "下午" }
+                )
+                .frame(width: periodWidth)
+            }
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
         }
+        .frame(height: BirthTimePickerLayout.pickerHeight)
     }
 
     private func pickerColumn<T: Hashable>(values: [T], selection: Binding<T>, formatter: @escaping (T) -> String) -> some View {
-        VStack {
-            Picker("", selection: selection) {
-                ForEach(values, id: \.self) { value in
-                    Text(formatter(value))
-                        .font(DSFonts.serifRegular(18))
-                        .foregroundStyle(Color.black)
-                }
+        Picker("", selection: selection) {
+            ForEach(values, id: \.self) { value in
+                Text(formatter(value))
+                    .font(DSFonts.serifRegular(18))
+                    .foregroundStyle(Color.black)
             }
-            .pickerStyle(.wheel)
-            .frame(maxWidth: .infinity)
-            .frame(height: 180)
-            .clipped()
         }
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.95),
-                            Color.white.opacity(0.85)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .shadow(color: Color.black.opacity(0.1), radius: 10, y: 6)
-        )
+        .labelsHidden()
+        .pickerStyle(.wheel)
+        .frame(maxWidth: .infinity)
+        .frame(height: BirthTimePickerLayout.pickerHeight)
+        .clipped()
     }
+}
+
+private enum BirthTimePickerLayout {
+    static let columnSpacing: CGFloat = 12
+    static let pickerHeight: CGFloat = 200
+    static let highlightHeight: CGFloat = 56
+    static let hourWidthRatio: CGFloat = 0.4
+    static let minuteWidthRatio: CGFloat = 0.4
+    static let periodWidthRatio: CGFloat = 0.2
 }
 
 #Preview {
