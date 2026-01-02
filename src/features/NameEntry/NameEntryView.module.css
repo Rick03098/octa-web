@@ -1,0 +1,236 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(字体、颜色、间距、圆角等) */
+/* [OUTPUT] NameEntryView组件的CSS样式, 定义姓名输入页面的布局和样式, 包括背景渐变、标题、输入框、按钮 */
+/* [POS] 特征层的样式文件, 为NameEntryView组件提供样式定义, 精确还原Figma设计 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景渐变（模糊的径向渐变，Figma设计中的效果） */
+.backgroundGradient {
+  position: absolute;
+  top: -28px;
+  left: 53px;
+  width: 265px;
+  height: 377px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(225, 238, 195, 0) 0%,
+    #f05053 100%
+  );
+  filter: blur(100px);
+  z-index: 0;
+}
+
+/* Eclipse装饰（如果需要添加图片，取消注释并添加图片路径） */
+/* .eclipse {
+  position: absolute;
+  top: -284px;
+  left: -98px;
+  width: 552px;
+  height: 552px;
+  background-image: url('/path-to-eclipse-image.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 0;
+} */
+
+/* 返回按钮 */
+.backButton {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:active {
+  opacity: 0.6;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 标题容器 */
+.titleContainer {
+  position: relative;
+  margin-top: 111px;
+  margin-left: 25px;
+  z-index: 1;
+}
+
+/* 标题文字 */
+.title {
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-extrabold); /* 800 */
+  font-size: var(--font-size-title-large); /* 45px */
+  line-height: 1; /* Figma设计中的行高 */
+  letter-spacing: -0.45px; /* Figma设计中的字间距 */
+  color: var(--color-text-white);
+  margin: 0;
+  padding: 0;
+}
+
+/* 输入框容器 */
+.inputContainer {
+  position: relative;
+  margin-top: 150px; /* 从标题容器开始计算，调整后更靠上 */
+  margin-left: 22px;
+  margin-right: 23px;
+  z-index: 1;
+}
+
+/* 输入框 - 精确匹配Figma设计 */
+.input {
+  width: 100%;
+  max-width: 345px; /* Figma设计中的宽度 */
+  height: 52px; /* Figma设计中的高度 */
+  /* Figma设计：bg-gradient-to-b from-[#fffbf8] to-[#f7f3ef] */
+  background: linear-gradient(
+    to bottom,
+    var(--color-input-bg-start), /* #fffbf8 */
+    var(--color-input-bg-end) /* #f7f3ef */
+  );
+  /* Figma设计：border border-[rgba(239,136,58,0.2)] border-solid */
+  border: 1px solid var(--color-input-border); /* rgba(239, 136, 58, 0.2) */
+  /* Figma设计：rounded-[16px] */
+  border-radius: var(--radius-lg); /* 16px */
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-lg); /* 18px */
+  color: var(--color-text-primary);
+  outline: none;
+  /* 文本内边距 */
+  padding: 0 16px;
+  box-sizing: border-box;
+  /* 确保文本垂直居中 */
+  line-height: 52px; /* 与height相同，确保文本垂直居中 */
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.input:focus {
+  border-color: var(--color-input-border-focus); /* rgba(239, 136, 58, 0.4) */
+  box-shadow: 0 0 0 2px rgba(239, 136, 58, 0.1);
+}
+
+.input::placeholder {
+  color: rgba(10, 25, 49, 0.3);
+}
+
+/* 继续按钮 */
+.continueButton {
+  position: absolute;
+  bottom: max(32px, env(safe-area-inset-bottom));
+  left: 24px;
+  right: 26px;
+  max-width: 340px; /* Figma设计中的宽度 */
+  height: 58px; /* Figma设计中的高度 */
+  margin: 0 auto;
+  background-color: var(--color-bg-white);
+  border: none;
+  border-radius: var(--radius-2xl); /* 20px */
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-black);
+  text-align: center;
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.continueButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.continueButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.96);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 移动端优化 */
+@media (max-width: 390px) {
+  .inputContainer {
+    margin-left: 22px;
+    margin-right: 22px;
+  }
+
+  .input {
+    max-width: 100%;
+  }
+
+  .continueButton {
+    left: 24px;
+    right: 24px;
+    max-width: 100%;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .titleContainer {
+    margin-top: 80px;
+  }
+  
+  .inputContainer {
+    margin-top: 120px;
+  }
+  
+  .continueButton {
+    bottom: max(24px, env(safe-area-inset-bottom));
+  }
+}
+
+/* 超小屏设备优化（如 iPhone SE） */
+@media (max-height: 568px) {
+  .titleContainer {
+    margin-top: 80px;
+  }
+  
+  .inputContainer {
+    margin-top: 140px;
+  }
+}
+
+/* 安全区域适配（iPhone X 及以后） */
+@supports (padding: max(0px)) {
+  .continueButton {
+    bottom: max(32px, env(safe-area-inset-bottom));
+  }
+}

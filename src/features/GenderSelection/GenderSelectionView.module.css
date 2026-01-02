@@ -1,0 +1,286 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(字体、颜色、间距、圆角等) */
+/* [OUTPUT] GenderSelectionView组件的CSS样式, 定义性别选择页面的布局和样式, 包括背景渐变、标题、选项按钮、提示文字、按钮 */
+/* [POS] 特征层的样式文件, 为GenderSelectionView组件提供样式定义, 精确还原Figma设计 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry); /* #fbf8f7 浅粉色背景，与NameEntry相同 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景渐变 - Eclipse（根据Figma设计） */
+.backgroundEclipse {
+  position: absolute;
+  top: -19px; /* Figma设计：-19px */
+  left: -41px; /* Figma设计：-41px */
+  width: 406px; /* Figma设计：406px */
+  height: 406px; /* Figma设计：406px */
+  /* Figma设计：Eclipse装饰图片 */
+  /* 如果需要使用图片资源，可以取消注释并添加图片路径 */
+  /* background-image: url('/path-to-eclipse-image.png'); */
+  /* background-size: contain; */
+  /* background-repeat: no-repeat; */
+  /* 暂时使用透明占位 */
+  background: transparent;
+  z-index: 0;
+}
+
+/* 背景渐变 - 棕色径向渐变（根据Figma设计，增强对比度） */
+.backgroundGradient {
+  position: absolute;
+  top: 120px; /* 向上移动以覆盖标题区域 */
+  left: 30px; /* 向左扩展 */
+  width: 250px; /* 增大宽度 */
+  height: 350px; /* 增大高度 */
+  /* Figma设计：从透明到#ada996的径向渐变，增强对比度以便白色标题可见 */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(173, 169, 150, 0.6) 0%, /* 更深的不透明度 */
+    rgba(173, 169, 150, 0.5) 30%,
+    rgba(173, 169, 150, 0.3) 60%,
+    rgba(200, 195, 180, 0.2) 80%,
+    transparent 100%
+  );
+  filter: blur(100px); /* Figma设计：blur(100px) */
+  z-index: 0;
+}
+
+/* 返回按钮 */
+.backButton {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:active {
+  opacity: 0.6;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 标题容器 */
+.titleContainer {
+  position: absolute;
+  top: 157px; /* Figma设计：157px */
+  left: 58px; /* Figma设计：58px */
+  z-index: 1;
+}
+
+/* 标题文字 */
+.title {
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-extrabold); /* 800 */
+  font-size: 40px; /* Figma设计：40px（注意：不是45px） */
+  line-height: 1; /* Figma设计中的行高 */
+  letter-spacing: -0.4px; /* Figma设计中的字间距 */
+  color: var(--color-text-white);
+  margin: 0;
+  padding: 0;
+  /* Figma设计：无文字阴影 */
+}
+
+/* 选项按钮容器 */
+.optionsContainer {
+  position: absolute;
+  top: 294px; /* Figma设计：第一个选项（男性）的top位置 */
+  left: 24px; /* Figma设计：24px */
+  right: 26px; /* 390 - 24 - 340 = 26px */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Figma设计：两个选项之间的间距（412px - 294px - 91px = 27px，调整为20px更合理） */
+  z-index: 1;
+}
+
+/* 选项按钮 */
+.optionButton {
+  width: 100%;
+  max-width: 340px; /* Figma设计：340px */
+  height: 91px; /* Figma设计：91px */
+  padding: 0;
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md); /* 16px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  line-height: 34px; /* Figma设计：34px */
+  color: rgba(10, 25, 49, 0.8); /* Figma设计：rgba(10,25,49,0.8) */
+  /* Figma设计：bg-gradient-to-b from-[rgba(250,250,250,0.5)] to-[rgba(255,255,255,0.5)] */
+  background: linear-gradient(
+    to bottom,
+    rgba(250, 250, 250, 0.5),
+    rgba(255, 255, 255, 0.5)
+  );
+  border: none;
+  border-radius: var(--radius-2xl); /* 20px */
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.optionButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.optionButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* 选中状态的选项按钮 - 使用背景色和文字颜色的组合变化 */
+.optionButtonSelected {
+  /* 背景更不透明，从0.5增加到0.9，让选中项更明显 */
+  background: linear-gradient(
+    to bottom,
+    rgba(250, 250, 250, 0.9),
+    rgba(255, 255, 255, 0.9)
+  );
+  /* 文字颜色变深，从0.8增加到1.0，增强对比度 */
+  color: rgba(10, 25, 49, 1);
+  /* 添加轻微的阴影，增强立体感 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 底部区域（使用Auto Layout） */
+.bottomSection {
+  position: relative;
+  margin-top: auto; /* 使用margin-top: auto推到底部 */
+  padding-bottom: max(32px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 水平居中 */
+  gap: 10px; /* 提示文字和按钮之间的间距（737px - 717px - 12px ≈ 8px，调整为10px） */
+  z-index: 2;
+  width: 100%; /* 确保宽度100%以正确居中 */
+  box-sizing: border-box; /* 包含padding在内的宽度 */
+  padding-left: 24px; /* 左右内边距 */
+  padding-right: 24px;
+}
+
+/* 提示文字 */
+.hintText {
+  font-family: var(--font-family-serif);
+  font-size: 10px; /* Figma设计：10px */
+  font-weight: var(--font-weight-regular);
+  color: rgba(0, 0, 0, 0.2); /* Figma设计：rgba(0,0,0,0.2) */
+  text-align: center;
+  max-width: 190px; /* Figma设计：190px */
+  line-height: normal;
+}
+
+/* 继续按钮 */
+.continueButton {
+  width: 100%;
+  max-width: 340px; /* Figma设计：340px */
+  height: 58px; /* Figma设计：58px */
+  background-color: var(--color-bg-white);
+  border: none;
+  border-radius: var(--radius-2xl); /* 20px */
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-black);
+  text-align: center;
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.continueButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.continueButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.96);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (hover: none) {
+  .continueButton:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .optionButton:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* 移动端优化 */
+@media (max-width: 480px) {
+  .container {
+    max-width: 100%;
+  }
+  
+  .optionsContainer {
+    left: 20px;
+    right: 20px;
+  }
+  
+  .bottomSection {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .titleContainer {
+    top: 100px;
+  }
+  
+  .optionsContainer {
+    top: 200px;
+    gap: 15px;
+  }
+  
+  .bottomSection {
+    padding-top: 20px;
+    gap: 8px;
+  }
+}
+
+/* 安全区域适配（iPhone X 等） */
+@supports (padding: max(0px)) {
+  .bottomSection {
+    padding-bottom: max(34px, env(safe-area-inset-bottom));
+  }
+}
+

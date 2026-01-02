@@ -1,0 +1,345 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距等), Figma设计的精确像素值 */
+/* [OUTPUT] MainDashboardView组件的CSS样式, 像素级精确还原Figma"输入后的主界面"设计 */
+/* [POS] 特征层主界面的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-main-with-env); /* #faf8f6 - Figma设计背景色 */
+  overflow: hidden;
+}
+
+/* ========================================================================
+   问候区域 - Figma: left=29px, top=109.5px (center-y)
+   ======================================================================== */
+
+.greetingSection {
+  position: absolute;
+  left: 29px; /* Figma精确值 */
+  top: 109.5px; /* Figma精确值 (center-y) */
+  transform: translateY(-50%); /* 垂直居中 */
+  z-index: 1;
+  width: 290px; /* Figma精确值 */
+  height: 55px; /* Figma精确值 */
+  display: flex;
+  align-items: center;
+}
+
+/* 问候语 - Figma: Noto Serif SC Regular, 24px, #01031a (名字部分 #333333) */
+.greeting {
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* Regular (400) */
+  font-size: var(--font-size-4xl); /* 24px */
+  line-height: normal;
+  color: var(--color-text-primary); /* #01031a / rgb(26, 31, 51) */
+  margin: 0;
+  padding: 0;
+}
+
+/* 名字颜色 - Figma: #333333 */
+.greetingName {
+  color: var(--color-text-tertiary); /* #333333 */
+  font-weight: var(--font-weight-regular);
+}
+
+/* ========================================================================
+   问题文案 - Figma: left=29px, top=164.5px (center-y)
+   ======================================================================== */
+
+.greetingQuestion {
+  position: absolute;
+  left: 29px; /* Figma精确值 */
+  top: 164.5px; /* Figma精确值 (center-y) */
+  transform: translateY(-50%); /* 垂直居中 */
+  width: 290px; /* Figma精确值 */
+  height: 55px; /* Figma精确值 */
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* Regular (400) */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-text-tertiary); /* #333333 */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+/* ========================================================================
+   环境卡片 - Figma: left=19px, top=221px, width=356px, height=410px, border-radius=60px
+   ======================================================================== */
+
+.environmentCard {
+  position: absolute;
+  left: 19px; /* Figma精确值 */
+  top: 221px; /* Figma精确值 */
+  width: 356px; /* Figma精确值 */
+  height: 410px; /* Figma精确值 */
+  border-radius: 60px; /* Figma精确值 */
+  overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
+  background-color: var(--color-bg-white);
+  position: relative; /* 为ripple效果定位 */
+}
+
+/* Ripple动画效果 */
+@keyframes ripple {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* 环境照片 */
+.environmentImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  pointer-events: none;
+}
+
+/* 状态问题文字 - 基础样式, Source Han Serif SC ExtraLight, 16px, #6faecf */
+/* 位置通过内联样式精确控制，基于Figma设计的绝对像素值 */
+.statusQuestion {
+  position: absolute;
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-extralight); /* ExtraLight (200) */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-text-status-question); /* #6faecf */
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+  pointer-events: none;
+  white-space: nowrap; /* 防止换行 */
+  width: 290px; /* Figma精确值 */
+  height: 55px; /* Figma精确值 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0; /* 默认隐藏 */
+  visibility: hidden; /* 默认不可见 */
+}
+
+/* 激活状态 - 显示词条 */
+.statusQuestionActive {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 退出动画状态 */
+.statusQuestionExiting {
+  animation: statusQuestionFadeOut 0.8s ease-out forwards;
+}
+
+/* 单个字符容器 */
+.statusQuestionChar {
+  display: inline-block;
+  opacity: 0;
+}
+
+/* 激活状态的字符动画 - 参考对话页面的文字弹出效果 */
+.statusQuestionActive .statusQuestionChar {
+  animation: statusQuestionCharFadeIn 0.4s ease-out forwards;
+}
+
+/* 文字淡入向上动画（参考对话页面） */
+@keyframes statusQuestionCharFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* 词条整体淡出动画 */
+@keyframes statusQuestionFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* 对话按钮 - 卡片中间下方 */
+.chatButton {
+  position: absolute;
+  left: 50%; /* 居中 */
+  top: 596.5px; /* Figma精确值：center-y=569px + height/2 = 596.5px，使用translateY(-50%)居中 */
+  transform: translate(-50%, -50%); /* 水平垂直居中 */
+  width: 87px; /* Figma精确值 */
+  height: 43px; /* Figma精确值 */
+  background-color: var(--color-bg-white); /* white */
+  border: none;
+  border-radius: 63px; /* Figma精确值 */
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-medium); /* Medium (500) */
+  font-size: 15px; /* Figma精确值 */
+  line-height: normal;
+  text-align: center;
+  color: var(--color-black); /* black */
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  box-shadow: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.chatButton:hover {
+  opacity: 0.9;
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.chatButton:active {
+  opacity: 0.8;
+  transform: translate(-50%, -50%) scale(0.98);
+}
+
+
+/* ========================================================================
+   副标题 - Figma: left=197px (居中), top=892.5px (center-y), Noto Serif SC Regular, 16px, rgba(255,255,255,0.97)
+   ======================================================================== */
+
+.subtitle {
+  position: absolute;
+  left: 50%; /* 居中 */
+  top: 892.5px; /* Figma精确值 (center-y) */
+  transform: translate(-50%, -50%); /* 居中 */
+  width: 290px; /* Figma精确值 */
+  height: 55px; /* Figma精确值 */
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* Regular (400) */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  text-align: center;
+  color: var(--color-text-white-97); /* rgba(255,255,255,0.97) */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* ========================================================================
+   空状态区域（当没有环境时显示）
+   ======================================================================== */
+
+.emptyStateSection {
+  position: absolute;
+  left: 50%;
+  top: 420px;
+  transform: translate(-50%, -50%);
+  width: 290px;
+  text-align: center;
+  z-index: 1;
+}
+
+.emptyStateTitle {
+  font-family: var(--font-family-source-han);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-2xl); /* 20px */
+  font-style: normal;
+  line-height: normal;
+  color: var(--color-text-white);
+  margin: 0;
+  padding: 0;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyStateSubtitle {
+  font-family: var(--font-family-source-han);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md); /* 16px */
+  font-style: normal;
+  line-height: normal;
+  color: var(--color-text-white-97); /* rgba(255,255,255,0.97) */
+  margin: 0;
+  padding: 0;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================================================
+   添加按钮 - 右下角
+   ======================================================================== */
+
+.addButton {
+  position: absolute; /* 使用 absolute 定位，相对于容器定位 */
+  right: var(--spacing-lg); /* 16px 右边距 */
+  bottom: var(--spacing-lg); /* 16px 底部边距 */
+  width: 58px;
+  height: 58px;
+  background-color: var(--color-white);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 10;
+}
+
+.addButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.addButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.addIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .greetingSection {
+    top: 80px;
+  }
+
+  .greetingQuestion {
+    top: 120px;
+  }
+
+  .environmentCard {
+    top: 180px;
+    width: 300px;
+    height: 350px;
+  }
+
+  .subtitle {
+    top: 750px;
+  }
+}

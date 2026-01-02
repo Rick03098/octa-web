@@ -1,0 +1,2 @@
+export { ReportBottomTabBar } from './ReportBottomTabBar';
+

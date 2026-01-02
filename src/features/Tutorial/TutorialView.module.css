@@ -1,0 +1,245 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距等), Figma设计的精确像素值 */
+/* [OUTPUT] TutorialView组件的CSS样式, 像素级精确还原Figma设计 */
+/* [POS] 特征层教程页面的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-tutorial); /* #faf8f6 */
+  overflow: hidden;
+}
+
+/* ========================================================================
+   背景渐变 - Eclipse 效果（淡蓝色）
+   ======================================================================== */
+
+.backgroundGradient {
+  position: absolute;
+  left: 1px;
+  top: 22px;
+  width: 399px;
+  height: 399px;
+  /* 径向渐变 - 淡蓝色到白色 */
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--gradient-tutorial-1) 0%,      /* 淡蓝色中心 */
+    var(--gradient-tutorial-2) 40%,     /* 更淡的蓝色 */
+    var(--gradient-tutorial-3) 70%,     /* 渐变到背景色 */
+    rgba(250, 248, 246, 0) 100%         /* 透明外围 */
+  );
+  filter: blur(40px);
+  opacity: 0.8;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ========================================================================
+   返回按钮
+   ======================================================================== */
+
+.backButton {
+  position: absolute;
+  left: 17px;
+  top: 62px;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--transition-base);
+}
+
+.backButton:hover {
+  opacity: 0.7;
+}
+
+.backButton:active {
+  opacity: 0.5;
+}
+
+/* ========================================================================
+   主要内容区域
+   ======================================================================== */
+
+.contentContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+/* 教程插图容器 - Figma: left=89px, top=151px, 220x297px */
+.illustrationContainer {
+  position: absolute;
+  left: 89px;
+  top: 151px;
+  width: 220px;
+  height: 297px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 插图图片 */
+.illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 20px;
+  /* 图片加载失败时的占位样式 */
+  background: linear-gradient(
+    135deg,
+    rgba(200, 220, 240, 0.3) 0%,
+    rgba(220, 235, 245, 0.2) 100%
+  );
+}
+
+/* 框架叠加层已移除 - 保持插图简洁 */
+
+/* 标题 - Figma: top=496px, Noto Serif SC, Medium, 24px, black */
+.title {
+  position: absolute;
+  top: 496px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-medium); /* 500 */
+  font-size: var(--font-size-4xl); /* 24px */
+  line-height: normal;
+  color: var(--color-black);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* 说明文字列表 - Figma: top=564px, center-x */
+.bulletList {
+  position: absolute;
+  top: 564px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  z-index: 1;
+}
+
+/* 说明文字项 - Source Han Serif SC, Regular, 16px, rgba(0,0,0,0.77) */
+.bulletItem {
+  font-family: var(--font-family-source-han);
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: 1.5; /* 行高 */
+  color: var(--color-text-tutorial-hint); /* rgba(0,0,0,0.77) */
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ========================================================================
+   继续按钮
+   ======================================================================== */
+
+.continueButton {
+  position: absolute;
+  left: 29px;
+  top: 743px;
+  width: 340px;
+  height: 58px;
+  background-color: var(--color-white);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 2;
+  /* 文字样式 - Noto Serif SC, Regular, 16px, black */
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-black);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.continueButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.continueButton:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================================================
+   Home Indicator - 已移除（网页版不需要）
+   ======================================================================== */
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+/* 移动端优化 */
+@media (max-width: 390px) {
+  .illustrationContainer {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .continueButton {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .backButton {
+    top: 40px;
+  }
+
+  .illustrationContainer {
+    top: 100px;
+    width: 180px;
+    height: 240px;
+  }
+
+  .title {
+    top: 360px;
+  }
+
+  .bulletList {
+    top: 400px;
+  }
+
+  .continueButton {
+    top: 500px;
+  }
+}
+

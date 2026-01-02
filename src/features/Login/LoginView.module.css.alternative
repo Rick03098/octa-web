@@ -1,0 +1,172 @@
+/* 
+ * 替代方案：更接近 Auto Layout 的 Flexbox 实现
+ * 
+ * 如果 Figma 设计使用了 Auto Layout，建议采用这种布局方式
+ * 优点：更灵活、响应式更好、维护更容易
+ */
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景动画容器 */
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* 底部白色卡片 - 使用 Flexbox 替代绝对定位 */
+.bottomCard {
+  /* 使用 margin-top: auto 将卡片推到底部，类似 Auto Layout 的 Space Between */
+  margin-top: auto;
+  background-color: var(--color-bg-white);
+  border-top-left-radius: var(--radius-4xl); /* 24px */
+  border-top-right-radius: var(--radius-4xl); /* 24px */
+  padding: 40px 25px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  
+  /* 如果需要固定从 62.8% 位置开始，可以使用 flex-basis */
+  flex-basis: 37.2%; /* 100% - 62.8% = 37.2% */
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+/* 按钮容器 - 保持 Flexbox */
+.buttonsContainer {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 主按钮（创建账户） */
+.primaryButton {
+  width: 100%;
+  height: 58px;
+  padding: 0;
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: normal;
+  color: var(--color-text-white);
+  background-color: var(--color-bg-button-primary);
+  border: none;
+  border-radius: var(--radius-2xl);
+  cursor: pointer;
+  box-shadow: var(--shadow-button-primary);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 创建账户按钮的内阴影效果 */
+.primaryButton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0.716px 0.822px 0 rgba(0, 0, 0, 0.36),
+              inset 0 -0.786px 0.822px 0 rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-2xl);
+}
+
+.primaryButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.primaryButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 次要按钮（谷歌登录） */
+.secondaryButton {
+  width: 100%;
+  height: 58px;
+  padding: 0;
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: normal;
+  color: rgba(10, 25, 49, 0.8);
+  background: linear-gradient(
+    180deg,
+    rgba(250, 250, 250, 0.7) 0%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-2xl);
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.secondaryButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.secondaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 会员登录链接容器 */
+.memberLoginLink {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  line-height: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  color: #666666;
+}
+
+/* 会员登录链接中的强调部分 */
+.linkText {
+  color: #3b475a;
+}
+
+.memberLoginLink:hover {
+  opacity: 0.8;
+}
+
+.memberLoginLink:active {
+  opacity: 0.6;
+}
+

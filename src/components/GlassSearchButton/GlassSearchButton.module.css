@@ -1,0 +1,79 @@
+/* [INPUT] styles/variables.css中的CSS变量 */
+/* [OUTPUT] GlassSearchButton组件的样式, 实现复杂的玻璃效果（backdrop-blur + mix-blend-mode） */
+/* [POS] 可复用组件的样式文件, 定义iOS风格的玻璃态效果 */
+
+.container {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  padding: 6px 8px 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 1;
+}
+
+/* 玻璃背景效果 - 多层叠加实现 iOS 玻璃态 */
+.glassBackground {
+  position: absolute;
+  inset: -4px;
+  border-radius: 296px;
+  pointer-events: none;
+}
+
+/* 第一层：模糊遮罩 */
+.glassBackground::before {
+  content: '';
+  position: absolute;
+  inset: -26px;
+  opacity: 0.67;
+  border-radius: 296px;
+  background: white;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: -3;
+}
+
+/* 第二层：color-dodge 混合 */
+.glassBackground::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 296px;
+  background: linear-gradient(90deg, rgb(247, 247, 247) 0%, rgb(247, 247, 247) 100%);
+  mix-blend-mode: color-dodge;
+  z-index: -2;
+}
+
+/* 第三层：半透明白色叠加 */
+.container::before {
+  content: '';
+  position: absolute;
+  inset: -4px 2px -4px -4px;
+  border-radius: 296px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mix-blend-mode: normal;
+  z-index: -1;
+}
+
+.icon {
+  position: relative;
+  z-index: 1;
+}
+
+/* 悬停效果 */
+.container:hover {
+  opacity: 0.9;
+}
+
+.container:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+

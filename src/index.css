@@ -1,0 +1,79 @@
+/* [INPUT] tailwindcss库, styles/variables.css中的CSS变量, Google Fonts的Noto Serif SC字体 */
+/* [OUTPUT] 全局CSS样式, 包括Tailwind导入、CSS变量导入、字体导入、基础重置样式、移动端优化 */
+/* [POS] 全局样式文件(旧版本), 注意: 新代码应使用styles/index.css, 此文件可能包含Tailwind相关代码 */
+@import "tailwindcss";
+
+/* Import global CSS variables */
+@import './styles/variables.css';
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 移动端优化 */
+  overflow-x: hidden;
+  /* 防止移动端缩放 */
+  touch-action: pan-y;
+}
+
+/* 确保根容器支持移动端 */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* 移动端居中显示，最大宽度限制 */
+  margin: 0 auto;
+  max-width: 390px;
+  position: relative;
+}
+
+/* 桌面端提示 */
+@media (min-width: 768px) {
+  body::before {
+    content: '此应用专为移动设备设计，请在手机上打开';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 24px 48px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    max-width: 90%;
+  }
+}
+
+/* 移动端优化 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* 隐藏滚动条但保持滚动功能 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

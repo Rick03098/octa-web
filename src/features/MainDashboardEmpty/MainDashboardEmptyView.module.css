@@ -1,0 +1,256 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距等), Figma设计的精确像素值 */
+/* [OUTPUT] MainDashboardEmptyView组件的CSS样式, 像素级精确还原Figma"首次打开的主界面"设计 */
+/* [POS] 特征层首次打开主界面的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量, 严禁硬编码色值 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry); /* #fffcf9 - 与 NameEntry 页面相同 */
+  overflow: hidden;
+}
+
+/* ========================================================================
+   问候区域 - Figma: left=29px, top=109.5px (center-y), Noto Serif SC Regular, 24px, #01031a (名字 #333333)
+   ======================================================================== */
+
+.greetingSection {
+  position: absolute;
+  left: 29px;
+  top: 109.5px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.greeting {
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-2xl); /* 24px */
+  line-height: 1;
+  color: var(--color-text-primary); /* #01031a */
+  margin: 0;
+  padding: 0;
+}
+
+.greetingName {
+  color: var(--color-text-tertiary); /* #333333 */
+}
+
+/* ========================================================================
+   问题文案 - Figma: left=29px, top=164.5px (center-y), Noto Serif SC Regular, 16px, #333333
+   ======================================================================== */
+
+.greetingQuestion {
+  position: absolute;
+  left: 29px;
+  top: 164.5px;
+  transform: translateY(-50%);
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: 1;
+  color: var(--color-text-tertiary); /* #333333 */
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+/* ========================================================================
+   背景渐变 - Figma: left=-9px, top=303px, width=400px, height=313.33px
+   使用 CSS 径向渐变实现，参考 onboarding 页面的实现方式
+   ======================================================================== */
+
+/* 第一个渐变层（浅色背景） */
+.backgroundGradient {
+  position: absolute;
+  top: 303px; /* Figma: top=303px */
+  left: -9px; /* Figma: left=-9px */
+  width: 400px; /* Figma: width=400px */
+  height: 313.33px; /* Figma: height=313.33px */
+  /* 使用径向渐变模拟粉色/桃色渐变效果 */
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 180, 200, 0.95) 0%, /* 更深的粉色，几乎不透明 */
+    rgba(255, 190, 210, 0.9) 15%,
+    rgba(255, 200, 220, 0.85) 30%,
+    rgba(255, 210, 225, 0.75) 45%,
+    rgba(255, 220, 230, 0.65) 60%,
+    rgba(255, 230, 235, 0.5) 75%,
+    rgba(255, 240, 245, 0.35) 88%,
+    transparent 100%
+  );
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 第二个渐变层（浓烈，Planet 元素） - 参考 BirthdayInput 的双渐变实现 */
+.backgroundGradientIntense {
+  position: absolute;
+  top: 280px; /* 稍微上移，与第一个渐变叠加 */
+  left: 50px; /* 稍微右移，创造层次感 */
+  width: 350px; /* 稍微小一些 */
+  height: 350px;
+  /* 使用更浓烈的径向渐变，颜色更深更饱和 */
+  background: radial-gradient(
+    ellipse at 40% 45%,
+    rgba(255, 160, 180, 0.95) 0%, /* 非常深的粉色 */
+    rgba(255, 170, 190, 0.9) 20%,
+    rgba(255, 180, 200, 0.85) 35%,
+    rgba(255, 190, 210, 0.7) 50%,
+    rgba(255, 200, 220, 0.55) 65%,
+    rgba(255, 210, 225, 0.4) 80%,
+    rgba(255, 220, 230, 0.25) 90%,
+    transparent 100%
+  );
+  filter: blur(90px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ========================================================================
+   空状态标题 - Figma: top=348.5px, left=197px (居中), Source Han Serif SC Regular, 20px, white
+   ======================================================================== */
+
+.emptyStateTitle {
+  position: absolute;
+  left: 197px; /* Figma: left=197px (居中) */
+  top: 348.5px; /* Figma: top=348.5px */
+  transform: translate(-50%, -50%);
+  width: 290px; /* Figma: width=290px */
+  height: 55px; /* Figma: height=55px */
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-regular); /* Regular */
+  font-size: var(--font-size-2xl); /* 20px */
+  font-style: normal;
+  line-height: normal;
+  color: var(--color-text-white); /* white */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+/* ========================================================================
+   空状态副标题 - Figma: top=403.5px, left=197px (居中), Source Han Serif SC Regular, 16px, rgba(255,255,255,0.97)
+   ======================================================================== */
+
+.emptyStateSubtitle {
+  position: absolute;
+  left: 197px; /* Figma: left=197px (居中) */
+  top: 403.5px; /* Figma: top=403.5px */
+  transform: translate(-50%, -50%);
+  width: 290px; /* Figma: width=290px */
+  height: 55px; /* Figma: height=55px */
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-regular); /* Regular */
+  font-size: var(--font-size-md); /* 16px */
+  font-style: normal;
+  line-height: normal;
+  color: var(--color-text-white-97); /* rgba(255,255,255,0.97) */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+/* ========================================================================
+   添加按钮 - 中间靠下位置
+   ======================================================================== */
+
+.addButton {
+  position: absolute;
+  left: 50%; /* 水平居中 */
+  bottom: 250px; /* 距离底部 250px，更靠近中间位置 */
+  transform: translateX(-50%); /* 水平居中 */
+  width: 58px;
+  height: 58px;
+  background-color: var(--color-white);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 10;
+}
+
+.addButton:hover {
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.addButton:active {
+  transform: translateX(-50%) scale(0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.addIcon {
+  display: block;
+}
+
+/* ========================================================================
+   底部副标题 - Figma: top=892.5px, left=197px (居中), Noto Serif SC Regular, 16px, rgba(255,255,255,0.97)
+   ======================================================================== */
+
+.bottomSubtitle {
+  position: absolute;
+  left: 197px; /* Figma: left=197px (居中) */
+  top: 892.5px; /* Figma: top=892.5px */
+  transform: translate(-50%, -50%);
+  width: 290px; /* Figma: width=290px */
+  height: 55px; /* Figma: height=55px */
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* Regular */
+  font-size: var(--font-size-md); /* 16px */
+  font-style: normal;
+  line-height: normal;
+  color: var(--color-text-white-97); /* rgba(255,255,255,0.97) */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .greetingSection {
+    top: 80px;
+  }
+
+  .greetingQuestion {
+    top: 120px;
+  }
+
+  .emptyStateTitle {
+    top: 280px;
+  }
+
+  .emptyStateSubtitle {
+    top: 320px;
+  }
+
+
+  .bottomSubtitle {
+    top: 680px;
+  }
+}
+
