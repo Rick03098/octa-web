@@ -1,4 +1,4 @@
-// [INPUT] react-router-dom的useNavigate, constants中的DSStrings, 样式文件, ArrowLeftIcon图标
+// [INPUT] react-router-dom的useNavigate, constants中的DSStrings, 样式文件, ArrowLeftIcon图标, imageUtils工具函数
 // [OUTPUT] TutorialView组件, 拍照教程页面UI, 导航至拍摄页面或返回主界面
 // [POS] 特征层的教程组件, 引导用户了解拍摄要求, 连接主界面和拍摄功能
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +36,7 @@ export function TutorialView() {
         {/* 教程插图 - Figma: left=89px, top=151px, 220x297px */}
         <div className={styles.illustrationContainer}>
           <img
-            src="http://localhost:3845/assets/b4eb843683aafc4dd42a29a982a4295167ad755a.png"
+            src="/images/b4eb843683aafc4dd42a29a982a4295167ad755a.png"
             alt="拍摄教程示意图"
             className={styles.illustration}
             onError={(e) => {

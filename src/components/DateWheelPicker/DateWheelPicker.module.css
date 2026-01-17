@@ -61,6 +61,9 @@
   /* 隐藏滚动条 */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+  /* 性能优化：启用硬件加速 */
+  transform: translateZ(0);
+  will-change: scroll-position;
 }
 
 .scrollContainer::-webkit-scrollbar {
@@ -80,4 +83,3 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-

@@ -1,4 +1,4 @@
-// [INPUT] React hooks, react-router-dom的useNavigate, stores中的useOnboardingStore, constants中的DSStrings, PlusIcon图标组件, 环境数据(当前为占位数据)
+// [INPUT] React hooks, react-router-dom的useNavigate, stores中的useOnboardingStore, constants中的DSStrings, PlusIcon图标组件, imageUtils工具函数, 环境数据(当前为占位数据)
 // [OUTPUT] MainDashboardView组件, "输入后的主界面"完整UI(问候语+环境卡片+对话按钮+副标题+右下角添加按钮), 导航至拍摄教程/对话开启页面的操作
 // [POS] 特征层的主界面组件, 是用户完成引导流程后的核心入口页面, 展示"输入后的主界面"设计, 协调所有子组件并处理导航逻辑
 import { useState, useEffect, useRef } from 'react';
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useOnboardingStore } from '../../stores/onboardingStore';
 import { DSStrings } from '../../constants/strings';
 import { PlusIcon } from '../../components/icons/PlusIcon';
+
 import styles from './MainDashboardView.module.css';
 
 export function MainDashboardView() {
@@ -14,10 +15,10 @@ export function MainDashboardView() {
 
   // TODO: 从后端 API 获取用户的环境列表
   // 当前使用占位数据，模拟有环境的状态
-  const [environments] = useState([
+  const [environments] = useState(() => [
     {
       id: '1',
-      imageUrl: 'http://localhost:3845/assets/e503f988099e962c10dd595d7fb80340d7487ce9.png',
+      imageUrl: '/images/蓝绿浅.gif',
       statusQuestions: [
         { text: '进展如何?', position: 'mid-left', left: -20, top: 340 },
         { text: '状态好些了么', position: 'top-right', left: 300, top: 289 },

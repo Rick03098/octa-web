@@ -32,3 +32,4 @@ export const ShutterButton: React.FC<ShutterButtonProps> = ({
   );
 };
 
+

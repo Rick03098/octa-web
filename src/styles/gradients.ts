@@ -72,3 +72,4 @@ export function chatGradient(): string {
   return `linear-gradient(180deg, var(--gradient-chat-1) 0%, var(--gradient-chat-2) 100%)`;
 }
 
+

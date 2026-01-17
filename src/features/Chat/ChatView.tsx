@@ -1,4 +1,4 @@
-// [INPUT] react-router-dom的useNavigate和useLocation hooks, DSStrings常量, 样式文件, ArrowLeftIcon/PlusIcon/ArrowUpIcon/SquareIcon图标组件, /icons/icons.svg图标文件
+// [INPUT] react-router-dom的useNavigate和useLocation hooks, DSStrings常量, 样式文件, ArrowLeftIcon/PlusIcon/ArrowUpIcon图标组件, /icons/icons.svg图标文件
 // [OUTPUT] ChatView组件, 对话页面的完整UI和交互逻辑, 导航返回主界面操作, 消息发送功能(待实现)
 // [POS] 特征层的对话组件, 从主界面进入, 展示对话历史和AI交互功能
 import { useState, useEffect, useRef } from 'react';
@@ -7,7 +7,6 @@ import { DSStrings } from '../../constants/strings';
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { ArrowUpIcon } from '../../components/icons/ArrowUpIcon';
-import { SquareIcon } from '../../components/icons/SquareIcon';
 import styles from './ChatView.module.css';
 
 interface Message {
@@ -145,7 +144,7 @@ export function ChatView() {
     <div className={styles.container}>
       {/* 背景图片 */}
       <img
-        src="http://localhost:3845/assets/e503f988099e962c10dd595d7fb80340d7487ce9.png"
+        src="/images/蓝绿浅.gif"
         alt="背景"
         className={styles.backgroundImage}
         onError={(e) => {
@@ -223,16 +222,6 @@ export function ChatView() {
           </div>
         ))}
 
-        {/* 加载状态 */}
-        {isLoading && (
-          <div className={styles.loadingContainer}>
-            <ul className={styles.loader}>
-              <li className={styles.ball} />
-              <li className={styles.ball} />
-              <li className={styles.ball} />
-            </ul>
-          </div>
-        )}
 
         <div ref={messagesEndRef} />
       </div>
@@ -282,19 +271,6 @@ export function ChatView() {
                 style={{ display: inputValue && !isLoading ? 'flex' : 'none' }}
               >
                 <ArrowUpIcon width={16} height={16} color="rgba(151, 130, 130, 1)" />
-              </button>
-              {/* 停止图标 - 运行中时显示 */}
-              <button 
-                className={styles.actionButton}
-                aria-label="停止"
-                onClick={() => {
-                  // TODO: 实现停止功能
-                  setIsLoading(false);
-                  console.log('Cancel');
-                }}
-                style={{ display: isLoading ? 'flex' : 'none' }}
-              >
-                <SquareIcon width={16} height={16} color="rgba(151, 130, 130, 1)" />
               </button>
             </div>
           </div>

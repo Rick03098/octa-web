@@ -1,4 +1,4 @@
-// [INPUT] react-router-dom的useNavigate hook, constants中的DSStrings, 样式文件, ArrowLeftIcon图标组件, ReportBottomTabBar组件, 报告数据(当前为占位数据)
+// [INPUT] react-router-dom的useNavigate hook, constants中的DSStrings, 样式文件, ArrowLeftIcon图标组件, ReportBottomTabBar组件, imageUtils工具函数, 报告数据(当前为占位数据)
 // [OUTPUT] ReportView组件, 报告阅读页面的完整UI和交互逻辑, 导航至聊天页面的操作(右上角向右箭头按钮和底部对话按钮), 底部固定tab栏提供收藏和分享功能
 // [POS] 特征层的报告组件, 连接预览页面和聊天页面, 展示完整的环境分析报告内容, 支持长内容滚动, 底部操作区跟随内容滚动, 底部固定tab栏提供收藏和分享功能
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +50,7 @@ export function ReportView() {
 （地支六冲）卯酉冲：卯位（东·右侧）与酉位（西·左侧）两臂皆强——右侧工具与左侧高架相对，使决策易左右拉扯；宜以右侧留白与收纳软化其力。
 巳亥冲：巳位（东南·后右斜）的小凳/杂物与亥位（西北·前左）的高位收纳相对，隐约成巳亥冲——流程易被临时事务打断，需设定节奏边界。
 子午冲、未丑冲、寅申冲、辰戌冲：未见对应迹象。`,
-    imageUrl: 'http://localhost:3845/assets/e503f988099e962c10dd595d7fb80340d7487ce9.png',
+    imageUrl: '/images/蓝绿浅.gif',
   };
 
   return (

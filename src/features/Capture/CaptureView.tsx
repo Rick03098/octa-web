@@ -1,4 +1,4 @@
-// [INPUT] react-router-dom的useNavigate, React hooks(useState, useRef, useEffect), constants中的DSStrings, 样式文件, ArrowLeftIcon和InfoIcon图标
+// [INPUT] react-router-dom的useNavigate, React hooks(useState, useRef, useEffect), constants中的DSStrings, 样式文件, ArrowLeftIcon和InfoIcon图标, imageUtils工具函数
 // [OUTPUT] CaptureView组件, 实时相机预览UI, 拍摄照片功能, 导航至教程/主界面/完成页面
 // [POS] 特征层的拍摄组件, 连接教程页面和拍摄完成页面, 提供核心的相机拍摄功能, 背景会被实际相机画面替换
 import { useState, useRef, useEffect } from 'react';
@@ -116,7 +116,7 @@ export function CaptureView() {
       {/* 背景占位图片 - 之后会替换为实时相机画面 */}
       {!useCameraStream && (
         <img
-          src="http://localhost:3845/assets/8c1d33aa44d06566d5842aed8fc0fd8a8ea89fd7.png"
+          src="/images/8c1d33aa44d06566d5842aed8fc0fd8a8ea89fd7.png"
           alt="拍摄背景占位图"
           className={styles.backgroundPlaceholder}
           onError={(e) => {

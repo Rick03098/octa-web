@@ -37,3 +37,4 @@ export const SquareIcon: React.FC<SquareIconProps> = ({
   );
 };
 
+

@@ -79,3 +79,4 @@ export type AnalysisJobGetResponse = AnalysisJob;
 
 export type AnalysisResultGetResponse = AnalysisResult;
 
+

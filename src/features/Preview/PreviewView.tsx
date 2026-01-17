@@ -1,4 +1,4 @@
-// [INPUT] react-router-dom的useNavigate, constants中的DSStrings, 样式文件
+// [INPUT] react-router-dom的useNavigate, constants中的DSStrings, 样式文件, imageUtils工具函数
 // [OUTPUT] PreviewView组件, 报告预览页面的UI和交互逻辑, 导航至报告阅读页面
 // [POS] 特征层的预览组件, 连接加载页面和报告阅读页面, 展示报告关键词预览和开启按钮
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ export function PreviewView() {
       {/* 背景渐变图片 - Figma: top=221px, left=-7px, width=400px, height=313.33px */}
       <div className={styles.gradientContainer}>
         <img
-          src="http://localhost:3845/assets/708-17842.png"
+          src="/images/708-17842.png"
           alt="背景渐变"
           className={styles.gradientImage}
           onError={(e) => {

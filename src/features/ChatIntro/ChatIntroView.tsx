@@ -1,4 +1,4 @@
-// [INPUT] react-router-dom的useNavigate hook, useOnboardingStore的name, constants中的DSStrings, 样式文件, ArrowLeftIcon和PlusIcon图标组件
+// [INPUT] react-router-dom的useNavigate hook, useOnboardingStore的name, constants中的DSStrings, 样式文件, ArrowLeftIcon和PlusIcon图标组件, imageUtils工具函数
 // [OUTPUT] ChatIntroView组件, 对话开启页面的完整UI和交互逻辑, 导航至主界面/对话页面的操作
 // [POS] 特征层的对话开启组件, 从主界面进入, 连接对话页面, 提供问候语、预设提示问题和输入功能
 import { useState } from 'react';
@@ -54,7 +54,7 @@ export function ChatIntroView() {
     <div className={styles.container}>
       {/* 背景图片 */}
       <img
-        src="http://localhost:3845/assets/e503f988099e962c10dd595d7fb80340d7487ce9.png"
+        src="/images/蓝绿浅.gif"
         alt="背景"
         className={styles.backgroundImage}
         onError={(e) => {
