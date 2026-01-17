@@ -1,11 +1,11 @@
-// [INPUT] React hooks, react-router-dom的useNavigate, stores中的useOnboardingStore, components中的ArrowLeftIcon和WheelPicker, constants中的DSStrings, 样式文件
+// [INPUT] React hooks, react-router-dom的useNavigate, stores中的useOnboardingStore, components中的ArrowLeftIcon和UnifiedWheelPicker, constants中的DSStrings, 样式文件
 // [OUTPUT] BirthdayInputView组件, 生日输入页面的UI和交互逻辑, 用户通过轮盘选择器选择年、月、日后保存到onboardingStore并跳转到出生时间信息页
 // [POS] 特征层的生日输入页面组件, 负责用户生日输入界面渲染和状态管理, 是引导流程的第二步
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOnboardingStore } from '../../stores/onboardingStore';
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon';
-import { DateWheelPicker } from '../../components/DateWheelPicker';
+import { UnifiedWheelPicker } from '../../components/UnifiedWheelPicker';
 import { DSStrings } from '../../constants/strings';
 import styles from './BirthdayInputView.module.css';
 
@@ -86,11 +86,12 @@ export function BirthdayInputView() {
         {/* 年选择器 */}
         <div className={styles.pickerWrapper} style={{ width: '136px' }}>
           <div className={styles.pickerContainer}>
-            <DateWheelPicker
+            <UnifiedWheelPicker
               values={years}
               selectedValue={year}
               onChange={setYear}
               labelSuffix="年"
+              infinite
             />
           </div>
         </div>
@@ -98,11 +99,12 @@ export function BirthdayInputView() {
         {/* 月选择器 */}
         <div className={styles.pickerWrapper} style={{ width: '57px' }}>
           <div className={styles.pickerContainer}>
-            <DateWheelPicker
+            <UnifiedWheelPicker
               values={months}
               selectedValue={month}
               onChange={setMonth}
               labelSuffix="月"
+              infinite
             />
           </div>
         </div>
@@ -110,11 +112,12 @@ export function BirthdayInputView() {
         {/* 日选择器 */}
         <div className={styles.pickerWrapper} style={{ width: '63px' }}>
           <div className={styles.pickerContainer}>
-            <DateWheelPicker
+            <UnifiedWheelPicker
               values={days}
               selectedValue={day}
               onChange={setDay}
               labelSuffix="日"
+              infinite
             />
           </div>
         </div>

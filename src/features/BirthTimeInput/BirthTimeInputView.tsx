@@ -1,12 +1,11 @@
-// [INPUT] React hooks(useState), react-router-dom的useNavigate, stores中的useOnboardingStore, components中的ArrowLeftIcon/DateWheelPicker/StringWheelPicker, constants中的DSStrings, types中的DayPeriod, 样式文件
+// [INPUT] React hooks(useState), react-router-dom的useNavigate, stores中的useOnboardingStore, components中的ArrowLeftIcon/UnifiedWheelPicker, constants中的DSStrings, types中的DayPeriod, 样式文件
 // [OUTPUT] BirthTimeInputView组件, 出生时间输入页面的UI和交互逻辑, 用户通过轮盘选择器选择时、分、时段后保存到onboardingStore并跳转到出生地信息页
 // [POS] 特征层的出生时间输入页面组件, 负责用户出生时间输入界面渲染和状态管理, 是引导流程的第三步
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOnboardingStore } from '../../stores/onboardingStore';
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon';
-import { DateWheelPicker } from '../../components/DateWheelPicker';
-import { StringWheelPicker } from '../../components/StringWheelPicker';
+import { UnifiedWheelPicker } from '../../components/UnifiedWheelPicker';
 import { DSStrings } from '../../constants/strings';
 import { DayPeriod } from '../../types/models';
 import styles from './BirthTimeInputView.module.css';
@@ -67,11 +66,12 @@ export function BirthTimeInputView() {
         {/* 时选择器 */}
         <div className={`${styles.pickerWrapper} ${styles.pickerWrapperHour}`}>
           <div className={styles.pickerContainer}>
-            <DateWheelPicker
+            <UnifiedWheelPicker
               values={hours}
               selectedValue={hour}
               onChange={setHour}
               labelSuffix="点"
+              infinite
             />
           </div>
         </div>
@@ -79,22 +79,24 @@ export function BirthTimeInputView() {
         {/* 分选择器 */}
         <div className={`${styles.pickerWrapper} ${styles.pickerWrapperMinute}`}>
           <div className={styles.pickerContainer}>
-            <DateWheelPicker
+            <UnifiedWheelPicker
               values={minutes}
               selectedValue={minute}
               onChange={setMinute}
               labelSuffix="分"
+              infinite
             />
           </div>
         </div>
 
-        {/* 时段选择器（只有上午和下午两个选项） */}
+        {/* 时段选择器（只有上午和下午两个选项，不启用循环） */}
         <div className={styles.pickerWrapper}>
           <div className={styles.pickerContainer}>
-            <StringWheelPicker
+            <UnifiedWheelPicker
               values={periods}
               selectedValue={period}
               onChange={(value) => setPeriod(value as DayPeriod)}
+              infinite={false}
             />
           </div>
         </div>
