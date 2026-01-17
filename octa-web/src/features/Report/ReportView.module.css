@@ -1,0 +1,261 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距、圆角、阴影等), Figma设计的精确像素值 */
+/* [OUTPUT] ReportView组件的CSS样式, 像素级精确还原Figma设计, 所有颜色和字体使用CSS变量 */
+/* [POS] 特征层报告页面的样式文件, 使用flexbox和绝对定位精确实现Figma布局, 所有设计令牌引用CSS变量 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-white);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================================================
+   顶部白色背景 header - Figma: height=106px
+   ======================================================================== */
+
+.header {
+  position: relative;
+  width: 100%;
+  height: 106px; /* Figma: height=106px */
+  background-color: var(--color-white);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+/* 对话按钮（右上角向右箭头）- Figma: left=341px, top=68px, 24x24px */
+.chatNavButton {
+  position: absolute;
+  right: 25px; /* 390px - 341px - 24px = 25px */
+  top: 68px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  z-index: 11;
+}
+
+/* 向右箭头图标 - 将左箭头旋转180度 */
+.arrowRightIcon {
+  transform: rotate(180deg);
+}
+
+/* ========================================================================
+   滚动内容区域
+   ======================================================================== */
+
+.scrollContainer {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1;
+  /* 隐藏滚动条但保持滚动功能 */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* ========================================================================
+   顶部图片容器 - Figma: height=211px
+   ======================================================================== */
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 211px; /* Figma: height=211px */
+  z-index: 1;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ========================================================================
+   报告内容卡片 - 白色背景，带阴影
+   ======================================================================== */
+
+.contentCard {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-white);
+  padding: var(--spacing-2xl); /* 32px 上下左右 */
+  z-index: 2;
+}
+
+/* 报告标题 - Figma: Noto Serif SC, Regular, 18px, black */
+.title {
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-xl); /* 18px */
+  line-height: normal;
+  color: var(--color-black);
+  margin: 0;
+  padding: 0;
+  margin-bottom: var(--spacing-md); /* 12px 标题和日期之间的间距 */
+}
+
+/* 日期 - Figma: Noto Serif SC, Regular, 12px, #828282 */
+.date {
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-sm); /* 12px */
+  line-height: normal;
+  color: #828282; /* Figma: text-[#828282]，此颜色未在CSS变量中定义，保留硬编码 */
+  margin: 0;
+  padding: 0;
+  margin-bottom: var(--spacing-xl); /* 24px 日期和正文内容之间的间距 */
+}
+
+/* ========================================================================
+   报告内容文本
+   ======================================================================== */
+
+.content {
+  position: relative;
+  width: 100%;
+}
+
+/* 段落样式 - Figma: Source Han Serif SC, Regular, 18px, line-height: 28px */
+.paragraph {
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-xl); /* 18px */
+  line-height: 28px; /* Figma: leading-[28px]，使用硬编码值（未在CSS变量中定义） */
+  color: var(--color-black);
+  margin: 0;
+  padding: 0;
+  margin-bottom: 0; /* 段落之间使用 line-height 自然间距，Figma 中使用 &nbsp; 分隔 */
+}
+
+/* ========================================================================
+   底部操作区域 - 跟随内容滚动 - Figma: Component 3
+   ======================================================================== */
+
+.footer {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-white);
+  margin-top: var(--spacing-3xl); /* 48px 与正文内容的间距 */
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ========================================================================
+   底部间距
+   ======================================================================== */
+
+.bottomSpacer {
+  height: 81px; /* 为底部 tab 栏留出空间 */
+}
+
+/* "更多问题?" 文本 - Figma: Noto Serif SC, Regular, 18px, black */
+.moreQuestions {
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-xl); /* 18px */
+  line-height: normal;
+  color: var(--color-black);
+  margin: 0;
+  padding: 0;
+  margin-bottom: 8px; /* 箭头和文本之间的间距 */
+}
+
+/* 向下箭头 - Figma: 24x24px, 旋转 270deg */
+.arrowDown {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px; /* 箭头和按钮之间的间距 */
+}
+
+.arrowDownIcon {
+  transform: rotate(270deg); /* 向下旋转 270 度 */
+}
+
+/* "对话" 按钮 - Figma: width=340px, height=58px, 白色背景, 黑色边框, 圆角 20px */
+.chatButton {
+  width: 340px;
+  height: 58px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-2xl); /* 20px */
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: 34px; /* Figma: leading-[34px]，使用硬编码值（未在CSS变量中定义） */
+  color: var(--color-black);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chatButton:hover {
+  transform: scale(1.02);
+}
+
+.chatButton:active {
+  transform: scale(0.98);
+}
+
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+/* 移动端优化 */
+@media (max-width: 390px) {
+  .contentCard {
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+  }
+
+  .chatButton {
+    width: calc(100% - 50px);
+    max-width: 340px;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .header {
+    height: 80px;
+  }
+
+  .chatNavButton {
+    top: 50px;
+  }
+
+  .imageContainer {
+    height: 150px;
+  }
+
+  .content {
+    padding-top: 30px;
+  }
+}

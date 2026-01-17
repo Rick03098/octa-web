@@ -1,0 +1,13 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(--app-max-width, --color-bg-white) */
+/* [OUTPUT] AppShell组件的CSS样式, 定义应用外壳的布局和样式 */
+/* [POS] 组件层的样式文件, 为AppShell组件提供样式定义 */
+.container {
+  width: 100%;
+  max-width: 390px; /* Figma设计宽度：390px (iPhone 标准宽度) */
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--color-bg-white);
+  position: relative;
+  overflow-x: hidden;
+}
+

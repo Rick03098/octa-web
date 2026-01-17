@@ -1,0 +1,449 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距、圆角等), Figma设计的精确像素值 */
+/* [OUTPUT] ChatView组件的CSS样式, 像素级精确还原Figma设计 */
+/* [POS] 特征层对话页面的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry); /* 备用背景色 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================================================
+   背景图片
+   ======================================================================== */
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  z-index: 0;
+  pointer-events: none;
+  transform: scaleY(-1); /* 垂直翻转背景图片 */
+}
+
+/* ========================================================================
+   返回按钮 - Figma: left=20px, top=49px, 24x24px
+   ======================================================================== */
+
+.backButton {
+  position: absolute;
+  left: 20px;
+  top: 49px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:active {
+  opacity: 0.6;
+}
+
+/* ========================================================================
+   顶部渐变阴影（ScrollShadow效果）
+   参考 ScrollShadow 组件的渐变阴影实现
+   ======================================================================== */
+
+.topShadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px; /* 阴影高度，参考 ScrollShadow 的 size={80} */
+  /* 使用更平滑的渐变，从完全不透明到完全透明 */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.95) 15%,
+    rgba(255, 255, 255, 0.85) 30%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0.4) 70%,
+    rgba(255, 255, 255, 0.15) 85%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+  will-change: opacity; /* 优化性能 */
+}
+
+/* ========================================================================
+   对话内容区域
+   ======================================================================== */
+
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 85px; /* 为返回按钮留出空间（返回按钮 top=49px, height=24px, 加上间距约12px） */
+  padding-bottom: 100px; /* 为底部输入框留出空间 */
+  z-index: 1;
+  /* 隐藏滚动条但保持滚动功能 */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.messagesContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* ========================================================================
+   AI 消息容器（左侧）
+   ======================================================================== */
+
+.assistantMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl); /* 24px */
+  margin-top: 0;
+  padding-left: 35px;
+  padding-right: var(--spacing-lg);
+}
+
+.messageContent {
+  max-width: 310px;
+}
+
+/* AI 消息文本 - Figma: Source Han Serif SC Light, 16px, black, leading-[25px] */
+.assistantMessage {
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-light); /* 300 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: 25px; /* leading-[25px] */
+  color: var(--color-black);
+  margin: 0;
+  padding: 0;
+  margin-bottom: var(--spacing-md); /* 段落之间的间距 */
+}
+
+.assistantMessage:last-child {
+  margin-bottom: 0;
+}
+
+/* 单个字符容器 */
+.assistantMessageChar {
+  display: inline-block;
+  /* 文字动画效果：淡入 + 向上滑动 */
+  animation: textFadeInUp 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+/* 文字淡入向上动画 */
+@keyframes textFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ========================================================================
+   用户消息容器（右侧）
+   ======================================================================== */
+
+.userMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: var(--spacing-xl); /* 24px */
+  padding-left: var(--spacing-lg);
+  padding-right: 35px;
+}
+
+/* 用户消息气泡 - Figma: bg-[#fdfbfc], rounded-bl-[24px], rounded-br-[4px], rounded-tl-[24px], rounded-tr-[24px] */
+.userMessageBubble {
+  background-color: var(--color-bg-user-message); /* #fdfbfc */
+  border-radius: 24px 24px 24px 4px; /* 左上、右上、左下 24px，右下 4px */
+  padding: 12px 16px; /* 内边距，根据文本内容调整 */
+  max-width: 176px; /* Figma: w-[176px] */
+  /* 用户消息气泡动画效果：淡入 + 轻微缩放 */
+  animation: bubbleFadeIn 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+/* 用户消息气泡淡入动画 */
+@keyframes bubbleFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 用户消息文本 - Figma: Source Han Serif SC Light, 16px, black, leading-[20px], tracking-[0.25px] */
+.userMessage {
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-light); /* 300 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: 20px; /* leading-[20px] */
+  letter-spacing: 0.25px; /* tracking-[0.25px] */
+  color: var(--color-black);
+  margin: 0;
+  padding: 0;
+  /* 文字本身不需要动画，由父容器控制 */
+}
+
+/* ========================================================================
+   加载状态
+   ======================================================================== */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 34px;
+  padding-right: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* 加载动画 - 根据49px容器按比例调整（原代码60px，ball 12px） */
+.loader {
+  width: 49px; /* 原代码60px，按比例调整为49px */
+  height: 49px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ball {
+  list-style: none;
+  width: 10px; /* 原代码12px，按比例调整为10px (49/60 * 12 ≈ 9.8，取10px) */
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-text-primary); /* 使用CSS变量 */
+}
+
+.ball:nth-child(1) {
+  animation: bounce-1 2.1s ease-in-out infinite;
+}
+
+@keyframes bounce-1 {
+  50% {
+    transform: translateY(-15px); /* 原代码-18px，按比例调整为-15px (49/60 * 18 ≈ 14.7) */
+    width: 5px; /* 原代码6px，按比例调整为5px */
+    height: 5px;
+  }
+}
+
+.ball:nth-child(2) {
+  animation: bounce-2 2.1s ease-in-out 0.3s infinite;
+}
+
+@keyframes bounce-2 {
+  50% {
+    transform: translateY(-15px);
+    width: 5px;
+    height: 5px;
+  }
+}
+
+.ball:nth-child(3) {
+  animation: bounce-3 2.1s ease-in-out 0.6s infinite;
+}
+
+@keyframes bounce-3 {
+  50% {
+    transform: translateY(-15px);
+    width: 5px;
+    height: 5px;
+  }
+}
+
+/* ========================================================================
+   底部输入区域 - Figma: bottom=34px
+   ======================================================================== */
+
+.inputContainer {
+  position: absolute;
+  bottom: 34px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md); /* 12px */
+  z-index: 2;
+  max-width: calc(100% - 28px); /* 确保不超出屏幕 */
+  box-sizing: border-box;
+}
+
+/* 添加按钮 - Figma: left=14px, size=50px */
+.addButton {
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-bg-chat-input-transparent); /* rgba(241,241,241,0.3)，比 ChatIntro 更透明 */
+  border: none;
+  border-radius: 25px; /* 50px / 2 = 25px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.addButton:hover {
+  opacity: 0.9;
+}
+
+.addButton:active {
+  opacity: 0.8;
+  transform: scale(0.95);
+}
+
+/* Composer根容器 */
+.composerRoot {
+  flex: 1;
+  position: relative;
+  min-width: 0; /* 防止 flex 子元素溢出 */
+  overflow: hidden;
+}
+
+/* Composer内部容器 - 圆角背景和边框 */
+.composerInner {
+  display: flex;
+  align-items: center;
+  border-radius: 32px; /* rounded-4xl */
+  background-color: #f8f8f8; /* bg-[#f8f8f8] */
+  border: 1px solid #e5e5e5; /* ring-1 ring-[#e5e5e5] */
+  padding: 8px 8px 8px 16px; /* 内部间距 */
+  gap: 8px;
+  min-width: 0; /* 防止溢出 */
+  max-width: 100%; /* 确保不超出父容器 */
+  box-sizing: border-box;
+}
+
+/* 输入框 - 透明背景 */
+.input {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: 22px;
+  color: var(--color-text-primary); /* text-[#0d0d0d] */
+  outline: none;
+  padding: 0;
+  min-width: 0; /* 防止 flex 子元素溢出 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: var(--color-text-primary);
+  opacity: 0.4;
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 操作按钮容器 - 右侧圆形按钮 */
+.actionButtonContainer {
+  position: relative;
+  width: 36px; /* h-9 w-9 = 36px */
+  height: 36px;
+  flex-shrink: 0;
+}
+
+/* 操作按钮 - 基础样式（浅色，隐藏在背景中） */
+.actionButton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* rounded-full */
+  background-color: transparent; /* 透明背景，隐藏在输入框背景中 */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* 发送按钮 */
+.actionButtonSend {
+  /* 默认隐藏，有文本时显示 */
+}
+
+/* 取消按钮 */
+.actionButtonCancel {
+  /* 默认隐藏，运行中时显示 */
+}
+
+.actionButton:hover {
+  opacity: 0.9;
+}
+
+.actionButton:active {
+  opacity: 0.8;
+  transform: scale(0.95);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 图标样式 - Figma: width=16.75px, height=19.2px */
+.actionButton img {
+  display: block;
+  width: 16.75px;
+  height: 19.2px;
+  object-fit: contain;
+}
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .inputContainer {
+    bottom: 20px;
+  }
+
+  .messagesContainer {
+    padding-bottom: 80px;
+  }
+}
+

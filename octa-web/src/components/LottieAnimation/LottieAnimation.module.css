@@ -1,0 +1,12 @@
+/* [INPUT] 无外部依赖 */
+/* [OUTPUT] LottieAnimation组件的CSS样式, 定义动画容器的布局和定位 */
+/* [POS] 组件层的样式文件, 为LottieAnimation组件提供样式定义 */
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+}

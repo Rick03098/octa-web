@@ -1,0 +1,86 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(字体、颜色等) */
+/* [OUTPUT] StringWheelPicker组件的CSS样式, 使用Embla Carousel实现轮盘选择器布局 */
+/* [POS] 组件层的样式文件, 为StringWheelPicker组件提供样式定义 */
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  overflow: hidden;
+}
+
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 顶部渐变遮罩 */
+.maskTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 251, 248, 0.95),
+    rgba(255, 251, 248, 0)
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* 底部渐变遮罩 */
+.maskBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: linear-gradient(
+    to top,
+    rgba(255, 251, 248, 0.95),
+    rgba(255, 251, 248, 0)
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* Embla Carousel容器 */
+.emblaViewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.emblaContainer {
+  display: flex;
+  flex-direction: column;
+  /* 上下padding让选中项居中 */
+  padding: 8px 0;
+  touch-action: pan-y pinch-zoom;
+}
+
+.emblaSlide {
+  flex: 0 0 36px;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.itemText {
+  font-family: 'Source Han Serif SC', 'Noto Serif SC', serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #0a1931;
+  letter-spacing: -0.64px;
+  text-align: center;
+}
