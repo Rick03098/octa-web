@@ -1,0 +1,85 @@
+/**
+ * [INPUT]: styles/variables.css 中定义的 CSS 变量（字体、颜色等）
+ * [OUTPUT]: UnifiedWheelPicker 组件的样式，定义滚轮选择器的布局和视觉效果
+ * [POS]: components/UnifiedWheelPicker 的样式文件，复用设计系统的变量和渐变
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+
+/* ============================================================================
+   CONTAINER - 156px 高度容器（52px × 3 项），中间项为选中项
+   ============================================================================ */
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 156px; /* 52px × 3 = 156px，显示 3 个项，中间为选中 */
+  overflow: hidden;
+}
+
+/* ============================================================================
+   GRADIENT MASKS - 渐变遮罩，使非选中项半透明
+   ============================================================================ */
+
+/* 顶部渐变遮罩 - 遮住上方项，使其半透明 */
+.maskTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px; /* 遮住顶部一个项的高度 */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 251, 248, 1),
+    rgba(255, 251, 248, 0)
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* 底部渐变遮罩 - 遮住下方项，使其半透明 */
+.maskBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52px; /* 遮住底部一个项的高度 */
+  background: linear-gradient(
+    to top,
+    rgba(255, 251, 248, 1),
+    rgba(255, 251, 248, 0)
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* ============================================================================
+   ITEM STYLES - 选项样式，复用设计系统的字体定义
+   ============================================================================ */
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 复用设计系统的字体，添加移动端回退 */
+  font-family: 'Noto Serif SC', -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', serif;
+  font-size: 16px;
+  font-weight: 300; /* Light */
+  color: #0a1931;
+  letter-spacing: -0.64px;
+  text-align: center;
+
+  /* 禁用文本选择和点击高亮 */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================================================
+   HIGHLIGHT WRAPPER - 高亮区域包装器
+   ============================================================================ */
+
+.highlightWrapper {
+  /* 库会处理高亮效果，这里仅定义基础样式 */
+  position: relative;
+}

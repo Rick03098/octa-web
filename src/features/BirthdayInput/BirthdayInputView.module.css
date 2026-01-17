@@ -1,0 +1,239 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(字体、颜色、间距、圆角等) */
+/* [OUTPUT] BirthdayInputView组件的CSS样式, 定义生日输入页面的布局和样式, 包括背景渐变、标题、轮盘选择器容器、按钮 */
+/* [POS] 特征层的样式文件, 为BirthdayInputView组件提供样式定义, 精确还原Figma设计 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry); /* #fffcf9 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景渐变 - Ellipse（绿色为主，根据Figma设计，范围更大，颜色更深） */
+.backgroundEllipse {
+  position: absolute;
+  top: 30px; /* 向上移动更多，扩大覆盖范围 */
+  left: -100px; /* 向左扩展更多 */
+  width: 550px; /* 进一步增大宽度：从500px增加到550px */
+  height: 550px; /* 进一步增大高度：从500px增加到550px */
+  /* Figma设计：Ellipse 18，绿色为主体，使用更深更饱和的绿色和更大的范围 */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(130, 200, 160, 0.95) 0%, /* 更深的绿色，更高不透明度 */
+    rgba(140, 210, 170, 0.9) 12%,
+    rgba(150, 220, 180, 0.85) 25%,
+    rgba(165, 230, 195, 0.75) 40%,
+    rgba(180, 235, 205, 0.6) 55%,
+    rgba(190, 238, 210, 0.4) 70%,
+    rgba(194, 240, 219, 0.25) 82%,
+    rgba(194, 240, 219, 0.1) 90%,
+    transparent 98%
+  );
+  filter: blur(110px); /* 增大模糊半径，让渐变更柔和但范围更大 */
+  z-index: 0;
+}
+
+/* 背景渐变 - Polygon（粉色辅助，根据Figma设计） */
+.backgroundPolygon {
+  position: absolute;
+  top: 80px; /* 向上移动，与绿色更好地融合 */
+  left: -20px; /* 向左扩展 */
+  width: 450px; /* 增大宽度：从343px增加到450px */
+  height: 450px; /* 增大高度：从343px增加到450px */
+  /* Figma设计：Polygon 2，粉色作为辅助色，使用径向渐变模拟多边形渐变效果 */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(250, 212, 230, 0.35) 0%,
+    rgba(250, 212, 230, 0.25) 30%,
+    rgba(250, 212, 230, 0.12) 50%,
+    transparent 75%
+  );
+  filter: blur(100px); /* 增大模糊半径 */
+  z-index: 0;
+}
+
+/* 返回按钮 */
+.backButton {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:active {
+  opacity: 0.6;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 标题容器 */
+.titleContainer {
+  position: relative;
+  margin-top: 146px; /* Figma设计：从顶部146px开始 */
+  margin-left: 51px; /* Figma设计：从左侧51px开始 */
+  z-index: 1;
+}
+
+/* 标题文字 */
+.title {
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-extrabold); /* 800 */
+  font-size: var(--font-size-title-large); /* 45px */
+  line-height: 1; /* Figma设计中的行高 */
+  letter-spacing: -0.45px; /* Figma设计中的字间距 */
+  color: var(--color-text-white);
+  margin: 0;
+  padding: 0;
+  /* Figma设计：无文字阴影 */
+}
+
+/* 轮盘选择器容器（三个选择器横向排列） */
+.pickersContainer {
+  position: relative;
+  margin-top: 176px; /* Figma设计：从标题开始计算：322px - 146px = 176px */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px; /* Figma设计中三个选择器之间的间距 */
+  margin-left: 51px; /* 与标题左对齐 */
+  z-index: 1;
+}
+
+/* 轮盘选择器包装器 */
+.pickerWrapper {
+  position: relative;
+  height: 52px; /* Figma设计中的高度 */
+}
+
+/* 轮盘选择器容器（带渐变背景和边框） */
+.pickerContainer {
+  width: 100%;
+  height: 52px;
+  /* Figma设计：bg-gradient-to-b from-[#fffbf8] to-[#f7f3ef] */
+  background: linear-gradient(
+    to bottom,
+    var(--color-input-bg-start), /* #fffbf8 */
+    var(--color-input-bg-end) /* #f7f3ef */
+  );
+  /* Figma设计：border border-[rgba(239,136,58,0.2)] */
+  border: 1px solid var(--color-input-border); /* rgba(239, 136, 58, 0.2) */
+  /* Figma设计：rounded-[16px] */
+  border-radius: var(--radius-lg); /* 16px */
+  overflow: hidden;
+  position: relative;
+}
+
+/* 继续按钮 */
+.continueButton {
+  position: absolute;
+  bottom: max(32px, env(safe-area-inset-bottom));
+  left: 24px;
+  right: 26px;
+  max-width: 340px; /* Figma设计中的宽度 */
+  height: 58px; /* Figma设计中的高度 */
+  margin: 0 auto;
+  background-color: var(--color-bg-white);
+  border: none;
+  border-radius: var(--radius-2xl); /* 20px */
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-black);
+  text-align: center;
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.continueButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.continueButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.96);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 移动端优化 */
+@media (max-width: 390px) {
+  .pickersContainer {
+    margin-left: 51px;
+    gap: 6px;
+  }
+
+  .continueButton {
+    left: 24px;
+    right: 24px;
+    max-width: 100%;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .titleContainer {
+    margin-top: 80px;
+  }
+  
+  .pickersContainer {
+    margin-top: 100px;
+  }
+  
+  .continueButton {
+    bottom: max(24px, env(safe-area-inset-bottom));
+  }
+}
+
+/* 超小屏设备优化（如 iPhone SE） */
+@media (max-height: 568px) {
+  .titleContainer {
+    margin-top: 100px;
+  }
+  
+  .pickersContainer {
+    margin-top: 120px;
+  }
+}
+
+/* 安全区域适配（iPhone X 及以后） */
+@supports (padding: max(0px)) {
+  .continueButton {
+    bottom: max(32px, env(safe-area-inset-bottom));
+  }
+}
+
