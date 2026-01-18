@@ -44,32 +44,23 @@ html, body {
   max-width: none;
 }
 
-/* 仅在桌面端限制宽度并居中 */
+/* 仅在桌面端限制宽度并居中，同时确保背景覆盖整个屏幕 */
 @media (min-width: 768px) {
+  html, body {
+    /* 桌面端背景色与页面一致，避免出现边界线 */
+    background: linear-gradient(180deg, #fffcf9 0%, #f0f8f4 50%, #e8f4fc 100%);
+  }
+  
   #root {
     max-width: 390px;
     margin: 0 auto;
-  }
-}
-
-/* 桌面端提示 */
-@media (min-width: 768px) {
-  body::before {
-    content: '此应用专为移动设备设计，请在手机上打开';
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 24px 48px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    z-index: 10000;
-    font-family: 'Noto Serif SC', serif;
-    font-size: 18px;
-    color: #333;
-    text-align: center;
-    max-width: 90%;
+    /* 添加阴影使其看起来像手机屏幕 */
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: calc(100vh - 40px);
   }
 }
 

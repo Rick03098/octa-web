@@ -13,28 +13,45 @@
 }
 
 /* ========================================================================
-   背景渐变图片 - Figma: top=221px, left=-7px, width=400px, height=313.33px
+   背景渐变 - 使用 CSS 渐变实现蓝绿色模糊效果
+   参考 Figma: top=221px, 居中偏下位置
    ======================================================================== */
 
 .gradientContainer {
   position: absolute;
-  top: 221px; /* Figma: top=221px */
-  left: -7px; /* Figma: left=-7px */
-  width: 400px; /* Figma: width=400px */
-  height: 313.33px; /* Figma: height=313.33px */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 0;
   pointer-events: none;
-  overflow: hidden;
+  /* 使用多层径向渐变模拟 Figma 的渐变效果 */
+  background: 
+    /* 蓝色渐变 - 右侧 */
+    radial-gradient(
+      ellipse 80% 60% at 85% 55%,
+      rgba(166, 214, 252, 0.5) 0%,
+      rgba(199, 235, 255, 0.3) 40%,
+      transparent 70%
+    ),
+    /* 绿色渐变 - 左侧 */
+    radial-gradient(
+      ellipse 80% 60% at 15% 50%,
+      rgba(194, 240, 219, 0.5) 0%,
+      rgba(194, 240, 219, 0.3) 40%,
+      transparent 70%
+    ),
+    /* 基础背景色 */
+    var(--color-bg-name-entry);
 }
 
+/* 隐藏图片（使用 CSS 渐变替代） */
 .gradientImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  display: none;
 }
 
 /* ========================================================================
-   关键词文本 - 分散在页面上
+   关键词文本 - 分散在页面上，若隐若现效果
    ======================================================================== */
 
 .keyword {
@@ -54,6 +71,28 @@
   z-index: 1;
   margin: 0;
   padding: 0;
+  /* 若隐若现动画效果 */
+  animation: fadeInOut 4s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+/* 为每个关键词设置不同的动画延迟，产生错落的若隐若现效果 */
+.keyword:nth-child(2) { animation-delay: 0s; }
+.keyword:nth-child(3) { animation-delay: 0.8s; }
+.keyword:nth-child(4) { animation-delay: 1.6s; }
+.keyword:nth-child(5) { animation-delay: 2.4s; }
+.keyword:nth-child(6) { animation-delay: 3.2s; }
+
+/* 若隐若现动画关键帧 */
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.2;
+    filter: blur(1px);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(0);
+  }
 }
 
 /* ========================================================================

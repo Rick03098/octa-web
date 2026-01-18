@@ -8,7 +8,14 @@
   min-height: 100vh;
   height: 100vh;
   height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
-  background-color: var(--color-bg-name-entry); /* #fffcf9 浅粉色背景 */
+  /* 使用渐变背景替代纯色，避免边界线 */
+  background: linear-gradient(
+    180deg,
+    #fffcf9 0%,
+    #fffcf9 60%,
+    rgba(194, 240, 219, 0.15) 80%,
+    rgba(166, 214, 252, 0.15) 100%
+  );
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -17,41 +24,43 @@
 /* 背景渐变 - Ellipse 18（根据Figma设计，蓝色系） */
 .backgroundEllipse {
   position: absolute;
-  top: 620px; /* Figma设计：calc(70%+29.2px)，约620px */
-  left: -108px; /* Figma设计：-108px */
-  width: 624px; /* Figma设计：624px */
-  height: 624px; /* Figma设计：624px */
+  bottom: -200px; /* 从底部定位，确保渐变延伸到屏幕边缘 */
+  right: -150px;
+  width: 624px;
+  height: 624px;
   /* 使用蓝色系径向渐变模拟Ellipse装饰 */
   background: radial-gradient(
     ellipse at center,
-    rgba(166, 214, 252, 0.4) 0%, /* 使用--gradient-birth-time-1的颜色 */
-    rgba(199, 235, 255, 0.3) 30%,
+    rgba(166, 214, 252, 0.5) 0%,
+    rgba(199, 235, 255, 0.4) 30%,
     rgba(199, 235, 255, 0.2) 50%,
     rgba(199, 235, 255, 0.1) 70%,
     transparent 100%
   );
-  filter: blur(80px);
+  filter: blur(100px);
   z-index: 0;
+  pointer-events: none;
 }
 
 /* 背景渐变 - Polygon 2（根据Figma设计，绿色系） */
 .backgroundPolygon {
   position: absolute;
-  top: 536px; /* Figma设计：calc(60%+29.6px)，约536px */
-  left: -8px; /* Figma设计：-8px */
-  width: 628px; /* Figma设计：628px */
-  height: 628px; /* Figma设计：628px */
+  bottom: -100px; /* 从底部定位，确保渐变延伸到屏幕边缘 */
+  left: -150px;
+  width: 628px;
+  height: 628px;
   /* 使用绿色系径向渐变模拟Polygon装饰 */
   background: radial-gradient(
     ellipse at center,
-    rgba(194, 240, 219, 0.4) 0%, /* 使用--gradient-birthday-1的颜色 */
-    rgba(194, 240, 219, 0.3) 30%,
+    rgba(194, 240, 219, 0.5) 0%,
+    rgba(194, 240, 219, 0.4) 30%,
     rgba(194, 240, 219, 0.2) 50%,
     rgba(194, 240, 219, 0.1) 70%,
     transparent 100%
   );
-  filter: blur(80px);
+  filter: blur(100px);
   z-index: 0;
+  pointer-events: none;
 }
 
 /* 返回按钮 */
