@@ -10,7 +10,7 @@
   height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
   background-color: var(--color-white);
   overflow: hidden;
-  border-radius: 50px; /* Figma: rounded-[50px] */
+  /* 移除圆角，移动端应该是全屏显示 */
 }
 
 /* ========================================================================
@@ -116,6 +116,116 @@
   padding: 0;
   text-align: center;
   white-space: nowrap; /* 确保每行文字不换行 */
+}
+
+/* 小号文本 - 用于状态提示 */
+.textSmall {
+  font-family: var(--font-family-system);
+  font-weight: var(--font-weight-regular);
+  font-size: 16px;
+  line-height: normal;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* 错误文本 */
+.textError {
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-bold);
+  font-size: 20px;
+  line-height: normal;
+  color: #FFB4B4;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* ========================================================================
+   检测动画 - 箭头脉冲效果
+   ======================================================================== */
+
+.arrowContainer.detecting {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+/* ========================================================================
+   底部按钮区域（Figma: 底部大号圆角“继续”按钮）
+   ======================================================================== */
+
+.buttonContainer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 64px; /* 预留给 Home Indicator 的空间，贴近 Figma 的 743px 位置 */
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none; /* 让内部按钮接管点击 */
+}
+
+.startButton {
+  min-width: 0;
+  width: 340px; /* Figma: w-[340px] */
+  max-width: calc(100% - 40px); /* 小屏左右各留 20px 边距 */
+  height: 58px; /* Figma: h-[58px] */
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 20px; /* Figma: rounded-[20px] */
+  font-family: var(--font-family-serif); /* 与其他“继续”按钮保持同一衬线字体 */
+  font-size: var(--font-size-md); /* 16px，与其他继续按钮保持一致 */
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto; /* 恢复点击 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.startButton:hover {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.startButton:active {
+  opacity: 0.8;
+  transform: scale(0.96);
+}
+
+/* ========================================================================
+   进度条
+   ======================================================================== */
+
+.progressContainer {
+  margin-top: 40px;
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 2px;
+  transition: width 0.2s ease-out;
 }
 
 /* ========================================================================

@@ -10,6 +10,7 @@ import { BirthTimeInputView } from './features/BirthTimeInput/BirthTimeInputView
 import { BirthLocationInputView } from './features/BirthLocationInput/BirthLocationInputView';
 import { GenderSelectionView } from './features/GenderSelection/GenderSelectionView';
 import { BaziResultView } from './features/BaziResult/BaziResultView';
+import { PermissionsView } from './features/Permissions/PermissionsView';
 import { MainDashboardView } from './features/MainDashboard/MainDashboardView';
 import { MainDashboardEmptyView } from './features/MainDashboardEmpty/MainDashboardEmptyView';
 import { TutorialView } from './features/Tutorial/TutorialView';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/onboarding/birth-location" element={<BirthLocationInputView />} />
           <Route path="/onboarding/gender" element={<GenderSelectionView />} />
           <Route path="/onboarding/bazi-result" element={<BaziResultView />} />
+          <Route path="/permissions" element={<PermissionsView />} />
           <Route path="/main-empty" element={<MainDashboardEmptyView />} />
           <Route path="/main" element={<MainDashboardView />} />
           <Route path="/tutorial" element={<TutorialView />} />
@@ -47,7 +49,6 @@ function App() {
           <Route path="/chat-intro" element={<ChatIntroView />} />
           <Route path="/chat" element={<ChatView />} />
           {/* 其他路由将在后续实现中逐步添加 */}
-          {/* 权限页面（Permissions）暂时移除，网页版不需要 */}
         </Routes>
       </BrowserRouter>
     </AppShell>

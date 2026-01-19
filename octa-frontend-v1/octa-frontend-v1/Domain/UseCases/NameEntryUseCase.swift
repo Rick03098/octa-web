@@ -8,6 +8,7 @@
 import Foundation
 
 /// 專責處理名字信息頁的業務邏輯。
+@MainActor
 struct NameEntryUseCase {
     let flowState: UserOnboardingFlowState
 

@@ -68,7 +68,7 @@ export function BaziResultView() {
   };
 
   const handleContinue = () => {
-    navigate('/main-empty');
+    navigate('/permissions');
   };
 
   // 触摸开始

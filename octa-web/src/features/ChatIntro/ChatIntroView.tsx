@@ -135,31 +135,15 @@ export function ChatIntroView() {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
             />
-            {/* 动态按钮 - 根据状态显示不同图标 */}
-            <div className={styles.actionButtonContainer}>
-              {/* 声音波形图标 - 空状态时显示 */}
-              <button 
-                className={styles.actionButton}
-                aria-label="语音输入"
-                onClick={() => {
-                  // TODO: 实现语音输入功能
-                  console.log('Voice input');
-                }}
-                style={{ display: !inputValue ? 'flex' : 'none' }}
-              >
-                <img src="/icons/icons.svg" alt="语音输入" width={16.75} height={19.2} />
-              </button>
-              {/* 发送图标 - 有文本时显示 */}
-              <button 
-                className={styles.actionButton}
-                aria-label="发送"
-                onClick={handleSubmit}
-                disabled={!inputValue}
-                style={{ display: inputValue ? 'flex' : 'none' }}
-              >
-                <ArrowUpIcon width={16} height={16} color="rgba(151, 130, 130, 1)" />
-              </button>
-            </div>
+            {/* 发送按钮 - 始终显示白色背景，无输入时禁用 */}
+            <button 
+              className={`${styles.sendButton} ${inputValue ? styles.sendButtonActive : ''}`}
+              aria-label="发送"
+              onClick={handleSubmit}
+              disabled={!inputValue}
+            >
+              <ArrowUpIcon width={12} height={12} color="rgba(80, 80, 80, 1)" />
+            </button>
           </div>
         </div>
       </div>

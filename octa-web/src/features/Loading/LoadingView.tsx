@@ -8,20 +8,29 @@ import styles from './LoadingView.module.css';
 
 export function LoadingView() {
   const navigate = useNavigate();
-  const [loadingStage, setLoadingStage] = useState<'stage2' | 'stage3' | 'stage4'>('stage2');
+  const [loadingStage, setLoadingStage] = useState<'stage1' | 'stage2' | 'stage3' | 'stage4'>('stage1');
   const cycleCountRef = useRef(0); // 记录循环次数
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 加载页2-4循环切换，每隔3秒切换一次
   // 两个循环（6个阶段）后跳转到预览页面
   useEffect(() => {
-    // 首次加载，立即显示 stage2
-    setLoadingStage('stage2');
+    // 首次加载：先显示 stage1（准备就绪 / 开始演算），再进入 stage2-4 循环
+    setLoadingStage('stage1');
     cycleCountRef.current = 0;
 
-    // 每3秒切换一次
+    // 先停留 2 秒进入 stage2
+    const enterLoopTimer = setTimeout(() => {
+      setLoadingStage('stage2');
+    }, 2000);
+
+    // 每3秒切换一次（stage2-4 循环）
     const switchStage = () => {
       setLoadingStage((prev) => {
+        // stage1 不参与循环（只在首次进入显示）
+        if (prev === 'stage1') {
+          return 'stage2';
+        }
         // 计算下一个阶段：stage2 -> stage3 -> stage4 -> stage2 (循环)
         if (prev === 'stage2') {
           return 'stage3';
@@ -53,6 +62,7 @@ export function LoadingView() {
 
     // 清理函数
     return () => {
+      clearTimeout(enterLoopTimer);
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
@@ -66,6 +76,23 @@ export function LoadingView() {
       
       {/* 毛玻璃覆盖层 */}
       <div className={styles.glassOverlay} />
+
+      {/* 加载页1：准备就绪 / 开始演算（Figma: 608-19501） */}
+      {loadingStage === 'stage1' && (
+        <>
+          {/* 进度条占位符（Figma 有一个空容器） */}
+          <div className={styles.progressPlaceholder} />
+
+          {/* 文本内容 */}
+          <div className={styles.content}>
+            <p className={styles.text}>
+              {DSStrings.Loading.line1}
+              {'\n\n'}
+              {DSStrings.Loading.line2}
+            </p>
+          </div>
+        </>
+      )}
 
       {/* 加载页2：感知环境磁场 + 椭圆图标 */}
       {loadingStage === 'stage2' && (
@@ -132,9 +159,6 @@ export function LoadingView() {
           <div className={styles.progressPlaceholder} />
         </>
       )}
-
-      {/* Home Indicator */}
-      <div className={styles.homeIndicator} />
     </div>
   );
 }

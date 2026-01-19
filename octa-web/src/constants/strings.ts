@@ -33,8 +33,12 @@ export const DSStrings = {
   Permissions: {
     title: '开启权限',
     camera: '相机',
+    cameraDescription: '用于拍摄工位环境',
     microphone: '麦克风',
+    microphoneDescription: '用于语音相关功能',
     location: '位置',
+    locationDescription: '用于更精确的风水分析',
+    cameraRequired: '请开启相机权限以继续',
   },
   BaziResult: {
     pageTitles: ['纳音', '舒适区', '能量来源', '相冲能量'],
@@ -106,7 +110,7 @@ export const DSStrings = {
   OrientationCapture: {
     title: '获取方向',
     subtitle: '将手机保持稳定，3秒后自动记录当前朝向',
-    recording: '正在捕捉',
+    recording: '正在感知', // 从"正在捕捉"改为"正在感知"
     completed: '已记录',
     instruction1: '将手机放在桌面',
     instruction2: '指向工作时的正前方',

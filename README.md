@@ -34,9 +34,33 @@ Octa-v1/
 │   │   ├── core/        # 核心配置
 │   │   └── utils/       # 工具函数
 │   └── main.py
+├── octa-frontend-v1/    # iOS 前端（SwiftUI）
+├── octa-web/            # Web 前端（React + TypeScript）
+│   ├── src/
+│   │   ├── api/         # API 客户端层
+│   │   ├── features/    # 功能模块（按页面组织）
+│   │   ├── components/  # 通用组件
+│   │   ├── stores/      # 状态管理（Zustand）
+│   │   ├── types/       # TypeScript 类型定义
+│   │   ├── styles/      # CSS Modules + 设计令牌
+│   │   └── utils/       # 工具函数
+│   └── package.json
 ├── terraform/           # 基础设施代码
-└── .github/             # CI/CD 配置
+├── .cursorrules         # 分形架构守护者规范
+└── ARCHITECTURE_GUARDIAN.md  # 架构规范工作流指南
 ```
+
+## 架构规范
+
+本项目采用"分形架构守护者"规范，确保文档与代码同步：
+
+- **IOP 契约**: 每个文件头部包含 `[INPUT]`、`[OUTPUT]`、`[POS]` 注释
+- **文件夹地图**: 每个关键文件夹包含 `.folder.md` 说明文件
+- **文档同步**: 代码变更时同步更新相关文档
+
+详细规范请参考：
+- [.cursorrules](.cursorrules) - 核心规范定义
+- [ARCHITECTURE_GUARDIAN.md](ARCHITECTURE_GUARDIAN.md) - 工作流指南
 
 ## API 端点文档
 

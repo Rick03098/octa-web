@@ -1,0 +1,22 @@
+name: octa-frontend-v1
+options:
+  bundleIdPrefix: com.octa
+targets:
+  octa-frontend-v1:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - octa-frontend-v1
+    settings:
+      base:
+        INFOPLIST_FILE: octa-frontend-v1/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.codex.octa-frontend-v1
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0
+    dependencies:
+      - package: Lottie
+packages:
+  Lottie:
+    url: https://github.com/airbnb/lottie-ios.git
+    from: 4.0.0

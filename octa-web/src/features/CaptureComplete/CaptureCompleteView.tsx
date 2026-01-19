@@ -34,9 +34,6 @@ export function CaptureCompleteView() {
           {DSStrings.CaptureComplete.subtitle}
         </p>
       </div>
-
-      {/* Home Indicator */}
-      <div className={styles.homeIndicator} />
     </div>
   );
 }

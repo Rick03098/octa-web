@@ -37,6 +37,9 @@ export default function LottieAnimation({
       autoplay,
       animationData: typeof animationData === 'string' ? undefined : animationData,
       path: typeof animationData === 'string' ? animationData : undefined,
+      rendererSettings: {
+        preserveAspectRatio: 'xMidYMin slice', // 填充整个容器，顶部对齐
+      },
     });
 
     animationRef.current = animation;

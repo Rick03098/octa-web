@@ -8,6 +8,7 @@
 import Foundation
 
 /// 處理生日輸入的寫入行為。
+@MainActor
 struct BirthdayInputUseCase {
     let flowState: UserOnboardingFlowState
 

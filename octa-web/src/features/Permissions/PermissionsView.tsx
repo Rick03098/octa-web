@@ -1,87 +1,228 @@
-// [INPUT] React, react-router-dom的useNavigate
-// [OUTPUT] PermissionsView组件, 权限请求页面的UI和交互逻辑
-// [POS] 特征层的权限请求页面组件, 负责相机/麦克风/位置权限请求界面渲染(旧版本, 待重建)
-import React from 'react';
+// [INPUT] react-router-dom的useNavigate, React hooks(useState), constants中的DSStrings, 样式文件, permissions工具函数
+// [OUTPUT] PermissionsView组件, 权限申请页面的UI和交互逻辑, 触发系统权限弹窗, 导航至主界面空状态(/main-empty)
+// [POS] 特征层的权限申请页面组件, 连接八字结果页面和主界面空状态, 统一请求相机/麦克风/位置权限
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DSStrings } from '../../constants/strings';
+import {
+  requestCameraPermission,
+  requestMicrophonePermission,
+  requestLocationPermission,
+  type PermissionStatus,
+} from '../../utils/permissions';
+import styles from './PermissionsView.module.css';
 
-export const PermissionsView: React.FC = () => {
+// 权限项类型
+interface PermissionItem {
+  id: 'camera' | 'microphone' | 'location';
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  required: boolean;
+}
+
+// 权限状态类型
+type ToggleState = 'off' | 'on' | 'loading';
+
+export function PermissionsView() {
   const navigate = useNavigate();
+  
+  // 权限状态管理
+  const [permissionStates, setPermissionStates] = useState<Record<string, ToggleState>>({
+    camera: 'off',
+    microphone: 'off',
+    location: 'off',
+  });
 
-  const handleContinue = () => {
-    navigate('/main');
+  // 权限列表配置
+  const permissions: PermissionItem[] = [
+    {
+      id: 'camera',
+      name: DSStrings.Permissions.camera,
+      description: '用于拍摄工位环境',
+      icon: <CameraIcon />,
+      required: true, // 相机是必须的
+    },
+    {
+      id: 'microphone',
+      name: DSStrings.Permissions.microphone,
+      description: '用于语音相关功能',
+      icon: <MicrophoneIcon />,
+      required: false,
+    },
+    {
+      id: 'location',
+      name: DSStrings.Permissions.location,
+      description: '用于更精确的风水分析',
+      icon: <LocationIcon />,
+      required: false,
+    },
+  ];
+
+  // 处理权限开关点击
+  const handleToggle = async (permissionId: 'camera' | 'microphone' | 'location') => {
+    const currentState = permissionStates[permissionId];
+    
+    // 如果已经开启，不允许关闭（权限一旦授予无法撤销）
+    if (currentState === 'on') {
+      return;
+    }
+    
+    // 如果正在加载，不响应
+    if (currentState === 'loading') {
+      return;
+    }
+
+    // 设置为加载状态
+    setPermissionStates(prev => ({ ...prev, [permissionId]: 'loading' }));
+
+    let result: PermissionStatus;
+    
+    // 根据权限类型调用对应的请求函数
+    switch (permissionId) {
+      case 'camera':
+        result = await requestCameraPermission();
+        break;
+      case 'microphone':
+        result = await requestMicrophonePermission();
+        break;
+      case 'location':
+        result = await requestLocationPermission();
+        break;
+    }
+
+    // 更新状态
+    setPermissionStates(prev => ({
+      ...prev,
+      [permissionId]: result === 'granted' ? 'on' : 'off',
+    }));
   };
 
-  return (
-    <div className="relative w-full min-h-screen bg-[#fffcf9] flex flex-col">
-      {/* 背景渐变 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-100/50 via-blue-100/50 to-pink-100/50" />
-      
-      <div className="relative z-10 flex flex-col flex-1 px-6 pt-20 pb-8">
-        {/* 返回按钮 */}
-        <button
-          onClick={() => navigate('/onboarding/bazi-result')}
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-white/15 mb-8 self-start"
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M11 14L6 9L11 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
+  // 返回上一页
+  const handleBack = () => {
+    navigate('/onboarding/bazi-result');
+  };
 
+  // 继续到主界面（空状态，第一次进入需要添加环境）
+  const handleContinue = () => {
+    navigate('/main-empty');
+  };
+
+  // 检查是否可以继续（相机权限必须开启）
+  const canContinue = permissionStates.camera === 'on';
+
+  return (
+    <div className={styles.container}>
+      {/* 背景渐变 */}
+      <div className={styles.backgroundGradient} />
+
+      {/* 返回按钮 */}
+      <button className={styles.backButton} onClick={handleBack} aria-label="返回">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path
+            d="M11 14L6 9L11 4"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
+      {/* 内容区域 */}
+      <div className={styles.content}>
         {/* 标题 */}
-        <h1 className="text-[24px] font-semibold text-[#0a1931] mb-12 text-center">
-          开启权限
-        </h1>
+        <h1 className={styles.title}>{DSStrings.Permissions.title}</h1>
 
         {/* 权限列表 */}
-        <div className="flex-1 flex flex-col justify-center gap-4 mb-8">
-          <div className="bg-[rgba(250,250,250,0.5)] rounded-[20px] p-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-5 h-5 bg-gray-400 rounded" />
-              <div>
-                <h3 className="text-[16px] font-normal text-[#0a1931] mb-1">相机</h3>
-                <p className="text-[14px] text-[#0a1931]/60">用于拍摄工位环境</p>
+        <div className={styles.permissionsList}>
+          {permissions.map((permission) => (
+            <div key={permission.id} className={styles.permissionCard}>
+              <div className={styles.permissionInfo}>
+                <div className={styles.permissionIcon}>{permission.icon}</div>
+                <div className={styles.permissionText}>
+                  <span className={styles.permissionName}>{permission.name}</span>
+                  <span className={styles.permissionDescription}>
+                    {permission.description}
+                  </span>
+                </div>
+              </div>
+              <div
+                className={styles.toggle}
+                data-state={permissionStates[permission.id]}
+                onClick={() => handleToggle(permission.id)}
+                role="switch"
+                aria-checked={permissionStates[permission.id] === 'on'}
+                aria-label={`${permission.name}权限开关`}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleToggle(permission.id);
+                  }
+                }}
+              >
+                <div className={styles.toggleKnob} />
               </div>
             </div>
-            <div className="w-[42px] h-[26px] bg-[rgba(255,195,195,0.3)] border border-white rounded-[30px] relative">
-              <div className="absolute right-[3px] top-[3px] w-5 h-5 bg-white rounded-full shadow-sm" />
-            </div>
-          </div>
-
-          <div className="bg-[rgba(250,250,250,0.5)] rounded-[20px] p-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-5 h-5 bg-gray-400 rounded" />
-              <div>
-                <h3 className="text-[16px] font-normal text-[#0a1931] mb-1">麦克风</h3>
-                <p className="text-[14px] text-[#0a1931]/60">用于语音相关功能</p>
-              </div>
-            </div>
-            <div className="w-[42px] h-[26px] bg-[rgba(255,195,195,0.3)] border border-white rounded-[30px] relative">
-              <div className="absolute right-[3px] top-[3px] w-5 h-5 bg-white rounded-full shadow-sm" />
-            </div>
-          </div>
-
-          <div className="bg-[rgba(250,250,250,0.5)] rounded-[20px] p-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-5 h-5 bg-gray-400 rounded" />
-              <div>
-                <h3 className="text-[16px] font-normal text-[#0a1931] mb-1">位置</h3>
-                <p className="text-[14px] text-[#0a1931]/60">用于更精确的风水分析</p>
-              </div>
-            </div>
-            <div className="w-[42px] h-[26px] bg-[rgba(0,0,0,0.1)] border border-white rounded-[40px] relative">
-              <div className="absolute left-[3px] top-[3px] w-5 h-5 bg-white rounded-full shadow-sm" />
-            </div>
-          </div>
+          ))}
         </div>
+
+        {/* 提示文字 */}
+        {!canContinue && (
+          <p className={styles.hint}>请开启相机权限以继续</p>
+        )}
 
         {/* 继续按钮 */}
         <button
+          className={styles.continueButton}
           onClick={handleContinue}
-          className="w-full h-[58px] bg-white rounded-[20px] text-black font-normal text-base"
+          disabled={!canContinue}
         >
-          继续
+          {DSStrings.Common.actionContinue}
         </button>
       </div>
     </div>
   );
-};
+}
+
+// 相机图标组件
+function CameraIcon() {
+  return (
+    <img
+      src="/icons/permissions-camera.svg"
+      alt="相机"
+      width={20}
+      height={20}
+      aria-hidden="true"
+    />
+  );
+}
+
+// 麦克风图标组件
+function MicrophoneIcon() {
+  return (
+    <img
+      src="/icons/permissions-mic.svg"
+      alt="麦克风"
+      width={20}
+      height={20}
+      aria-hidden="true"
+    />
+  );
+}
+
+// 位置图标组件
+function LocationIcon() {
+  return (
+    <img
+      src="/icons/permissions-location.svg"
+      alt="位置"
+      width={20}
+      height={20}
+      aria-hidden="true"
+    />
+  );
+}
+
+export default PermissionsView;

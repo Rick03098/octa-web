@@ -8,18 +8,21 @@ interface FlashButtonProps {
   enabled: boolean;
   onClick: () => void;
   ariaLabel?: string;
+  disabled?: boolean; // 当设备不支持闪光灯时禁用
 }
 
 export const FlashButton: React.FC<FlashButtonProps> = ({
   enabled,
   onClick,
   ariaLabel = '闪光灯',
+  disabled = false,
 }) => {
   return (
     <button
-      className={`${styles.flashButton} ${enabled ? styles.flashEnabled : ''}`}
+      className={`${styles.flashButton} ${enabled ? styles.flashEnabled : ''} ${disabled ? styles.flashDisabled : ''}`}
       onClick={onClick}
       aria-label={ariaLabel}
+      disabled={disabled}
     >
       {/* 闪电图标 */}
       <svg

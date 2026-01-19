@@ -9,4 +9,14 @@
   left: 0;
   z-index: 0;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 确保 SVG 动画填充整个容器 */
+.container svg {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
 }

@@ -10,7 +10,7 @@
   height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
   background-color: var(--color-white);
   overflow: hidden;
-  border-radius: 50px; /* Figma: rounded-[50px] */
+  /* 移除圆角，移动端应该是全屏显示 */
 }
 
 /* ========================================================================

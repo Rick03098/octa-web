@@ -74,10 +74,10 @@
   border-top-right-radius: 12px;
 }
 
-/* 左下角 - Figma: left=29px, top=625px, size=67px */
+/* 左下角 - 使用 bottom 定位确保在所有屏幕上正确显示 */
 .frameCorner[data-position="bottom-left"] {
   left: 29px;
-  top: 625px;
+  bottom: 180px; /* 距离底部固定距离，为底部控制栏留空间 */
   width: 67px;
   height: 67px;
   border-bottom: 3px solid var(--color-capture-frame);
@@ -85,10 +85,10 @@
   border-bottom-left-radius: 12px;
 }
 
-/* 右下角 - Figma: left=296px, top=625px, size=68x67px */
+/* 右下角 - 使用 bottom 定位确保在所有屏幕上正确显示 */
 .frameCorner[data-position="bottom-right"] {
   right: 27px;
-  top: 625px;
+  bottom: 180px; /* 距离底部固定距离，为底部控制栏留空间 */
   width: 68px;
   height: 67px;
   border-bottom: 3px solid var(--color-capture-frame);
@@ -136,31 +136,24 @@
 }
 
 /* ========================================================================
-   底部控制栏 - 使用绝对定位精确匹配 Figma 设计
+   底部控制栏 - 使用 bottom 定位确保在所有屏幕上可见
    ======================================================================== */
 
-/* 闪光灯按钮容器 - Figma: left=29px, top=746px, 44.445x44.445px */
+/* 闪光灯按钮容器 - 左下角 */
 .flashButtonContainer {
   position: absolute;
   left: 29px;
-  top: 746px;
+  bottom: 60px; /* 距离底部固定距离 */
   z-index: 2;
 }
 
-/* 快门按钮容器 - Figma: left=160px, top=733px, 72x72px */
+/* 快门按钮容器 - 底部居中 */
 .shutterButtonContainer {
   position: absolute;
-  left: 160px; /* Figma 精确位置 */
-  top: 733px; /* Figma 精确位置 */
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 47px; /* 距离底部固定距离 */
   z-index: 2;
-}
-
-/* 移动端适配：在小屏幕上居中显示 */
-@media (max-width: 390px) {
-  .shutterButtonContainer {
-    left: 50%;
-    transform: translateX(-50%);
-  }
 }
 
 /* ========================================================================
@@ -180,8 +173,28 @@
 
 /* 横屏适配 */
 @media (orientation: landscape) and (max-height: 600px) {
-  .bottomControls {
-    bottom: 40px;
+  .flashButtonContainer {
+    bottom: 30px;
+  }
+  
+  .shutterButtonContainer {
+    bottom: 20px;
+  }
+  
+  .frameCorner[data-position="bottom-left"],
+  .frameCorner[data-position="bottom-right"] {
+    bottom: 120px;
+  }
+}
+
+/* 安全区域适配（iPhone X 等） */
+@supports (padding: max(0px)) {
+  .flashButtonContainer {
+    bottom: max(60px, calc(60px + env(safe-area-inset-bottom)));
+  }
+  
+  .shutterButtonContainer {
+    bottom: max(47px, calc(47px + env(safe-area-inset-bottom)));
   }
 }
 

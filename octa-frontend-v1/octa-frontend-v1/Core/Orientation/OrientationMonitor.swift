@@ -19,6 +19,12 @@ final class OrientationMonitor {
 
     func start(onAngleUpdate: @escaping (Double, Double) -> Void, completion: @escaping (Double) -> Void) {
         stop()
+        // 模拟器或不支持设备姿态的环境下，CoreMotion 不可用，直接返回默认角度，避免界面卡死
+        if !motionManager.isDeviceMotionAvailable {
+            onAngleUpdate(0, 1)
+            completion(0)
+            return
+        }
         self.currentAngleHandler = onAngleUpdate
         self.completion = completion
         baseline = nil

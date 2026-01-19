@@ -1,0 +1,300 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距等), Figma节点465:15614的精确像素值 */
+/* [OUTPUT] PermissionsView组件的CSS样式, 像素级精确还原Figma设计(开关粉色、无背景返回按钮、Source Han字体) */
+/* [POS] 特征层权限申请页面的样式文件, 使用CSS变量确保设计系统一致性, 2025-01-19更新匹配Figma */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-bg-name-entry);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ========================================================================
+   背景渐变
+   ======================================================================== */
+
+.backgroundGradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    var(--gradient-permissions-1) 0%,
+    var(--gradient-permissions-2) 50%,
+    var(--color-bg-name-entry) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========================================================================
+   内容区域 - Figma: 标题top:111px, 卡片top:231px
+   ======================================================================== */
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 17px;
+  padding-top: 111px;
+  padding-bottom: 32px;
+}
+
+/* ========================================================================
+   返回按钮 - Figma: 无背景，位置 left:20px, top:60px
+   ======================================================================== */
+
+.backButton {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.backButton:hover {
+  opacity: 0.7;
+}
+
+.backButton:active {
+  opacity: 0.5;
+}
+
+/* ========================================================================
+   标题 - Figma: Noto Serif SC, SemiBold, 24px, #0a1931
+   ======================================================================== */
+
+.title {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  text-align: center;
+  line-height: 38px;
+  letter-spacing: -0.96px;
+  margin-bottom: 72px;
+  margin-top: 0;
+}
+
+/* ========================================================================
+   权限列表 - Figma: 卡片间距约27px
+   ======================================================================== */
+
+.permissionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  margin-bottom: auto;
+}
+
+/* ========================================================================
+   权限卡片 - Figma: 356px x 54px, 圆角20px
+   ======================================================================== */
+
+.permissionCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 24px;
+  background: rgba(250, 250, 250, 0.5);
+  border-radius: var(--radius-2xl);
+  transition: background var(--transition-base);
+}
+
+.permissionCard:hover {
+  background: rgba(250, 250, 250, 0.7);
+}
+
+.permissionInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.permissionIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-icon-default);
+}
+
+.permissionText {
+  display: flex;
+  flex-direction: column;
+}
+
+.permissionName {
+  font-family: var(--font-family-source-han);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  letter-spacing: -0.64px;
+  line-height: 38px;
+}
+
+/* 移除描述文字，Figma设计中没有 */
+.permissionDescription {
+  display: none;
+}
+
+/* ========================================================================
+   开关组件 - Figma: 42x26px, 粉色开启状态
+   ======================================================================== */
+
+.toggle {
+  position: relative;
+  width: 42px;
+  height: 26px;
+  border-radius: 30px;
+  border: 0.5px solid white;
+  cursor: pointer;
+  transition: background var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.toggle[data-state="off"] {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 40px; /* Figma: Component 6 */
+}
+
+.toggle[data-state="on"] {
+  background: rgba(255, 195, 195, 0.3);
+  border-radius: 30px; /* Figma: Component 5 */
+}
+
+.toggle[data-state="loading"] {
+  background: rgba(255, 195, 195, 0.3);
+  cursor: wait;
+  border-radius: 30px;
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2.5px; /* 视觉微调：让圆点在26px高度内更居中 */
+  width: 20px;
+  height: 20px;
+  background: var(--color-white);
+  border-radius: var(--radius-full);
+  box-shadow: none; /* Figma: 纯色圆点，无阴影 */
+  transition: left var(--transition-base), transform var(--transition-base);
+}
+
+.toggle[data-state="off"] .toggleKnob {
+  left: 3px;
+}
+
+.toggle[data-state="on"] .toggleKnob {
+  left: 19px;
+}
+
+.toggle[data-state="loading"] .toggleKnob {
+  left: 11px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+/* ========================================================================
+   继续按钮 - Figma: 340px x 58px, Noto Serif SC
+   ======================================================================== */
+
+.continueButton {
+  width: 340px;
+  max-width: 100%;
+  height: 58px;
+  background: var(--color-white);
+  border-radius: var(--radius-2xl);
+  border: none;
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  margin: auto auto 0 auto;
+  line-height: 34px;
+  text-transform: capitalize;
+}
+
+.continueButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.continueButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========================================================================
+   提示文字
+   ======================================================================== */
+
+.hint {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  opacity: 0.5;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: 12px;
+}
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+@media (max-width: 390px) {
+  .content {
+    padding-top: 100px;
+  }
+  
+  .title {
+    margin-bottom: 60px;
+  }
+  
+  .permissionsList {
+    gap: 20px;
+  }
+}
+
+/* 安全区域适配 */
+@supports (padding: max(0px)) {
+  .content {
+    padding-bottom: max(32px, calc(32px + env(safe-area-inset-bottom)));
+  }
+}
