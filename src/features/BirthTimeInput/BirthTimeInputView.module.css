@@ -1,0 +1,267 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(字体、颜色、间距、圆角等) */
+/* [OUTPUT] BirthTimeInputView组件的CSS样式, 定义出生时间输入页面的布局和样式, 包括背景渐变、标题、轮盘选择器容器、提示文字、按钮 */
+/* [POS] 特征层的样式文件, 为BirthTimeInputView组件提供样式定义, 精确还原Figma设计 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry); /* #fffcf9 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景渐变 - Eclipse（根据Figma设计） */
+.backgroundEclipse {
+  position: absolute;
+  top: 36px; /* Figma设计：36px */
+  left: 52px; /* Figma设计：52px */
+  width: 379px; /* Figma设计：379px */
+  height: 379px; /* Figma设计：379px */
+  /* Figma设计：Eclipse装饰图片 */
+  /* 如果需要使用图片资源，可以取消注释并添加图片路径 */
+  /* background-image: url('/path-to-eclipse-image.png'); */
+  /* background-size: contain; */
+  /* background-repeat: no-repeat; */
+  /* 暂时使用透明占位 */
+  background: transparent;
+  z-index: 0;
+}
+
+/* 背景渐变 - 蓝色径向渐变（增强对比度和范围，确保文字清晰可见） */
+.backgroundBlueGradient {
+  position: absolute;
+  top: 100px; /* 向上扩展，覆盖标题区域 */
+  left: 50px; /* 向左扩展 */
+  width: 450px; /* 增大宽度：从181px增加到450px */
+  height: 400px; /* 增大高度：从258px增加到400px */
+  /* 使用更深的蓝色和更大的范围，确保文字清晰可见 */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(20, 130, 190, 0.95) 0%, /* 更深的蓝色 #1482BE */
+    rgba(24, 138, 200, 0.9) 15%,
+    rgba(28, 146, 210, 0.85) 30%, /* #1c92d2 */
+    rgba(35, 155, 220, 0.7) 50%,
+    rgba(45, 165, 230, 0.5) 65%,
+    rgba(55, 175, 240, 0.3) 80%,
+    rgba(242, 252, 254, 0.1) 95%,
+    transparent 100%
+  );
+  filter: blur(120px); /* 增大模糊半径，让渐变更柔和但范围更大 */
+  z-index: 0;
+}
+
+/* 返回按钮 */
+.backButton {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:active {
+  opacity: 0.6;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 标题容器 */
+.titleContainer {
+  position: relative;
+  margin-top: 106px; /* 166px - 60px (status bar) = 106px */
+  margin-left: 40px; /* 调整到40px，与第一个选择器左对齐 */
+  z-index: 1;
+}
+
+/* 标题文字 */
+.title {
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-extrabold); /* 800 */
+  font-size: var(--font-size-title-large); /* 45px */
+  line-height: 1; /* Figma设计中的行高 */
+  letter-spacing: -0.45px; /* Figma设计中的字间距 */
+  color: var(--color-text-white);
+  margin: 0;
+  padding: 0;
+  /* Figma设计：无文字阴影 */
+}
+
+/* 轮盘选择器容器（三个选择器横向排列，使用Auto Layout，与标题左对齐） */
+.pickersContainer {
+  position: relative;
+  margin-top: 131px; /* 297px - 166px = 131px，从标题底部开始 */
+  margin-left: 40px; /* 与标题左对齐（40px） */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1;
+}
+
+/* 轮盘选择器包装器 */
+.pickerWrapper {
+  position: relative;
+  height: 52px; /* Figma设计中的高度 */
+  flex-shrink: 0;
+  width: 81px; /* 所有选择器宽度相同 */
+}
+
+/* 第一个选择器（时）和第二个选择器（分）之间的间距 */
+.pickerWrapperHour {
+  margin-right: 30px; /* 第一个和第二个之间的间距：151 - 40 - 81 = 30px */
+}
+
+/* 第二个选择器（分）和第三个选择器（时段）之间的间距 */
+.pickerWrapperMinute {
+  margin-right: 40px; /* 第二个和第三个之间的间距：272 - 151 - 81 = 40px */
+}
+
+/* 轮盘选择器容器（带渐变背景和边框） */
+.pickerContainer {
+  width: 100%;
+  height: 52px;
+  /* Figma设计：bg-gradient-to-b from-[#fffbf8] to-[#f7f3ef] */
+  background: linear-gradient(
+    to bottom,
+    var(--color-input-bg-start), /* #fffbf8 */
+    var(--color-input-bg-end) /* #f7f3ef */
+  );
+  /* Figma设计：border border-[rgba(239,136,58,0.2)] */
+  border: 1px solid var(--color-input-border); /* rgba(239, 136, 58, 0.2) */
+  /* Figma设计：rounded-[16px] */
+  border-radius: var(--radius-lg); /* 16px */
+  overflow: hidden;
+  position: relative;
+}
+
+/* 底部区域容器（使用Auto Layout，确保在Chrome中居中） */
+.bottomSection {
+  position: relative;
+  margin-top: auto; /* 使用margin-top: auto推到底部 */
+  padding-bottom: max(32px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* 垂直居中 */
+  gap: 30px; /* 提示文字和按钮之间的间距 */
+  z-index: 2;
+  width: 100%;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box; /* 确保padding不会影响宽度计算 */
+}
+
+/* 提示文字（在继续按钮上方） */
+.hintText {
+  font-family: var(--font-family-serif);
+  font-size: 12px; /* Figma设计：12px */
+  font-weight: var(--font-weight-regular);
+  color: rgba(0, 0, 0, 0.2); /* Figma设计：rgba(0,0,0,0.2) */
+  text-align: center;
+}
+
+/* 继续按钮 */
+.continueButton {
+  width: 100%;
+  max-width: 340px; /* Figma设计：340px */
+  height: 58px; /* Figma设计：58px */
+  background-color: var(--color-bg-white);
+  border: none;
+  border-radius: var(--radius-2xl); /* 20px */
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-black);
+  text-align: center;
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.continueButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.continueButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.96);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (hover: none) {
+  .continueButton:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* 移动端优化 */
+@media (max-width: 480px) {
+  .container {
+    max-width: 100%;
+  }
+  
+  .pickersContainer {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .continueButton {
+    left: 20px;
+    right: 20px;
+    max-width: 100%;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .titleContainer {
+    margin-top: 80px;
+  }
+  
+  .pickersContainer {
+    margin-top: 100px;
+  }
+  
+  .hintText {
+    top: 500px;
+  }
+}
+
+/* 安全区域适配（iPhone X 等） */
+@supports (padding: max(0px)) {
+  .continueButton {
+    bottom: max(34px, env(safe-area-inset-bottom));
+  }
+}
+

@@ -1,0 +1,233 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(字体、颜色、间距、圆角、阴影等) */
+/* [OUTPUT] LoginView组件的CSS样式, 定义登录页面的布局和样式, 包括背景、按钮、卡片等 */
+/* [POS] 特征层的样式文件, 为LoginView组件提供样式定义, 精确还原Figma设计 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景动画容器 */
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* 底部白色卡片 - 使用Flexbox确保在不同屏幕高度下比例一致 */
+.bottomCard {
+  /* 使用 margin-top: auto 让卡片自然推到底部，类似 Auto Layout 的 Space Between */
+  margin-top: auto;
+  /* 使用 min-height 确保卡片有足够空间显示内容 */
+  min-height: 35%; /* 大约对应 37.2% (100% - 62.8%)，但确保最小高度 */
+  background-color: var(--color-bg-white);
+  border-top-left-radius: var(--radius-4xl); /* 24px */
+  border-top-right-radius: var(--radius-4xl); /* 24px */
+  padding: 40px 25px; /* Figma设计：顶部40px，左右25px */
+  padding-bottom: calc(32px + env(safe-area-inset-bottom)); /* 底部32px + 安全区域 */
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 内容从顶部开始排列 */
+  gap: 28px; /* Figma设计：按钮组和链接之间的间距 */
+  
+  /* 确保在小屏设备上也能正常显示 */
+  flex-shrink: 0;
+}
+
+/* 对于大屏设备，使用百分比确保视觉比例接近原始设计 */
+@media (min-height: 700px) {
+  .bottomCard {
+    min-height: 37.2%; /* 100% - 62.8% = 37.2% */
+  }
+}
+
+/* 对于小屏设备（如 iPhone SE），确保有足够空间 */
+@media (max-height: 700px) {
+  .bottomCard {
+    min-height: 320px; /* 确保按钮和内容都能显示 */
+  }
+}
+
+/* 按钮容器 */
+.buttonsContainer {
+  width: 100%;
+  max-width: 340px; /* Figma设计：按钮宽度340px */
+  display: flex;
+  flex-direction: column;
+  gap: 18px; /* Figma设计：两个按钮之间的间距 */
+}
+
+/* 主按钮（创建账户） */
+.primaryButton {
+  width: 100%;
+  height: 58px; /* Figma设计：按钮高度58px */
+  padding: 0;
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md); /* 16px - Figma设计 */
+  font-weight: var(--font-weight-medium);
+  line-height: normal;
+  color: var(--color-text-white);
+  background-color: var(--color-bg-button-primary);
+  border: none;
+  border-radius: var(--radius-2xl); /* 20px */
+  cursor: pointer;
+  box-shadow: var(--shadow-button-primary);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 创建账户按钮的内阴影效果（Figma设计中的shadow效果） */
+.primaryButton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0.716px 0.822px 0 rgba(0, 0, 0, 0.36),
+              inset 0 -0.786px 0.822px 0 rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-2xl);
+}
+
+.primaryButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.primaryButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 次要按钮（谷歌登录） */
+.secondaryButton {
+  width: 100%;
+  height: 58px; /* Figma设计：按钮高度58px */
+  padding: 0;
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md); /* 16px - Figma设计 */
+  font-weight: var(--font-weight-medium);
+  line-height: normal;
+  color: rgba(10, 25, 49, 0.8); /* Figma设计中的文本颜色 */
+  background: linear-gradient(
+    180deg,
+    rgba(250, 250, 250, 0.7) 0%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.25); /* Figma设计中的边框颜色 */
+  border-radius: var(--radius-2xl); /* 20px */
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.secondaryButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.secondaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 会员登录链接容器 */
+.memberLoginLink {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md); /* 16px - Figma设计 */
+  font-weight: var(--font-weight-regular);
+  line-height: 26px; /* Figma设计中的行高 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  color: #666666; /* "已有账户？"的颜色 */
+}
+
+/* 会员登录链接中的强调部分 */
+.linkText {
+  color: #3b475a; /* rgb(59, 71, 90) - Figma设计中的"会员登录"颜色 */
+}
+
+.memberLoginLink:hover {
+  opacity: 0.8;
+}
+
+.memberLoginLink:active {
+  opacity: 0.6;
+}
+
+/* 移动端优化 - 确保在390px宽度下正确显示 */
+@media (max-width: 390px) {
+  .bottomCard {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .buttonsContainer {
+    max-width: 100%;
+  }
+}
+
+/* 横屏适配 - 确保横屏时也有合理的布局 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .container {
+    height: 100dvh; /* 使用动态视口高度 */
+  }
+  
+  .bottomCard {
+    min-height: auto; /* 横屏时取消最小高度限制 */
+    padding-top: 24px;
+    gap: 18px;
+    /* 横屏时使用固定高度，确保内容不会被挤压 */
+    flex: 0 0 auto;
+  }
+}
+
+/* 超小屏设备优化（如 iPhone SE 第一代） */
+@media (max-height: 568px) {
+  .bottomCard {
+    min-height: 300px;
+    padding-top: 32px;
+    gap: 20px;
+  }
+  
+  .buttonsContainer {
+    gap: 16px; /* 稍微减小按钮间距 */
+  }
+}
+
+/* 超大屏设备优化（如 iPhone Pro Max） */
+@media (min-height: 900px) {
+  .bottomCard {
+    min-height: 37.2%; /* 保持比例 */
+    padding-top: 48px; /* 增加顶部内边距，视觉更平衡 */
+  }
+}

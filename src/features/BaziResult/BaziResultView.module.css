@@ -1,0 +1,269 @@
+/* [INPUT] styles/variables.css中定义的CSS变量(字体、颜色、间距、圆角等) */
+/* [OUTPUT] BaziResultView组件的CSS样式, 定义八字结果展示页面的布局和样式, 包括背景渐变、卡片、圆点指示器 */
+/* [POS] 特征层的样式文件, 为BaziResultView组件提供样式定义, 精确还原Figma设计 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  /* 使用渐变背景替代纯色，避免边界线 */
+  background: linear-gradient(
+    180deg,
+    #fffcf9 0%,
+    #fffcf9 60%,
+    rgba(194, 240, 219, 0.15) 80%,
+    rgba(166, 214, 252, 0.15) 100%
+  );
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景渐变 - Ellipse 18（根据Figma设计，蓝色系） */
+.backgroundEllipse {
+  position: absolute;
+  bottom: -200px; /* 从底部定位，确保渐变延伸到屏幕边缘 */
+  right: -150px;
+  width: 624px;
+  height: 624px;
+  /* 使用蓝色系径向渐变模拟Ellipse装饰 */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(166, 214, 252, 0.5) 0%,
+    rgba(199, 235, 255, 0.4) 30%,
+    rgba(199, 235, 255, 0.2) 50%,
+    rgba(199, 235, 255, 0.1) 70%,
+    transparent 100%
+  );
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 背景渐变 - Polygon 2（根据Figma设计，绿色系） */
+.backgroundPolygon {
+  position: absolute;
+  bottom: -100px; /* 从底部定位，确保渐变延伸到屏幕边缘 */
+  left: -150px;
+  width: 628px;
+  height: 628px;
+  /* 使用绿色系径向渐变模拟Polygon装饰 */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(194, 240, 219, 0.5) 0%,
+    rgba(194, 240, 219, 0.4) 30%,
+    rgba(194, 240, 219, 0.2) 50%,
+    rgba(194, 240, 219, 0.1) 70%,
+    transparent 100%
+  );
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 返回按钮 */
+.backButton {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:active {
+  opacity: 0.6;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 文本容器（非卡片） */
+.textContainer {
+  position: absolute;
+  top: 234px; /* Figma设计：calc(20%+65.2px)，约234px，向下移动 */
+  left: 24px; /* Figma设计：24px */
+  width: 345px; /* Figma设计：345px */
+  z-index: 1;
+}
+
+/* 文本（无卡片背景） */
+.text {
+  font-family: var(--font-family-serif);
+  font-size: 24px; /* Figma设计：24px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  line-height: 38px; /* Figma设计：38px */
+  letter-spacing: -0.96px; /* Figma设计：-0.96px */
+  color: var(--color-text-primary); /* #0a1931 */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 340px; /* Figma设计：340px */
+}
+
+/* 圆点指示器容器（71px宽，15px高，根据Figma设计） */
+.dotsContainer {
+  position: absolute;
+  bottom: 69.8px; /* Figma设计：calc(80%+69.8px)，约745px位置 */
+  left: 27px; /* Figma设计：27px */
+  width: 71px; /* Figma设计：71px总宽度 */
+  height: 15px; /* Figma设计：15px高度 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 使用space-between均匀分布 */
+  z-index: 2;
+  pointer-events: none; /* 不响应点击，仅作为视觉指示 */
+}
+
+/* 圆点指示器（白色实心） */
+.dot {
+  width: 10px; /* Figma设计：10px圆点 */
+  height: 10px; /* Figma设计：10px圆点 */
+  border-radius: 50%;
+  background-color: var(--color-white); /* 白色实心 */
+  border: none;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+/* 圆点（黑色实心，选中状态） */
+.dotActive {
+  background-color: var(--color-black); /* 黑色实心 */
+  border: none;
+}
+
+/* 圆点容器渐变消失动画（最后一页） */
+.dotsFading {
+  animation: fadeOut 1.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* 继续按钮（仅在最后一页显示） */
+.continueButton {
+  position: absolute;
+  bottom: 67.8px; /* Figma设计：calc(80%+67.8px)，约743px位置 */
+  left: 29px; /* Figma设计：29px */
+  width: 340px; /* Figma设计：340px */
+  height: 58px; /* Figma设计：58px */
+  background-color: var(--color-bg-white);
+  border: none;
+  border-radius: var(--radius-2xl); /* 20px */
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal;
+  color: var(--color-black);
+  text-align: center;
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.continueButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.continueButton:active:not(:disabled) {
+  opacity: 0.8;
+  transform: scale(0.96);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (hover: none) {
+  .continueButton:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* 加载和错误状态 */
+.loadingText,
+.errorText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  z-index: 10;
+}
+
+.errorText {
+  color: #f05053; /* 错误颜色 */
+}
+
+/* 移动端优化 */
+@media (max-width: 480px) {
+  .container {
+    max-width: 100%;
+  }
+  
+  .textContainer {
+    left: 20px;
+    right: 20px;
+    width: calc(100% - 40px);
+    max-width: 345px;
+  }
+  
+  .text {
+    max-width: 100%;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .textContainer {
+    top: 120px;
+  }
+  
+  .dotsContainer {
+    bottom: 40px;
+  }
+}
+
+/* 安全区域适配（iPhone X 等） */
+@supports (padding: max(0px)) {
+  .dotsContainer {
+    bottom: max(69.8px, calc(69.8px + env(safe-area-inset-bottom)));
+  }
+  
+  .continueButton {
+    bottom: max(67.8px, calc(67.8px + env(safe-area-inset-bottom)));
+  }
+}
+

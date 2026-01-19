@@ -1,0 +1,384 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距、圆角、阴影等), Figma设计的精确像素值 */
+/* [OUTPUT] ChatIntroView组件的CSS样式, 像素级精确还原Figma设计 */
+/* [POS] 特征层对话开启页面的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry); /* 备用背景色 */
+  overflow: hidden;
+}
+
+/* ========================================================================
+   背景图片
+   ======================================================================== */
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  z-index: 0;
+  pointer-events: none;
+  transform: scaleY(-1); /* 垂直翻转背景图片 */
+}
+
+/* ========================================================================
+   返回按钮 - Figma: left=22px, top=68px, 24x24px
+   ======================================================================== */
+
+.backButton {
+  position: absolute;
+  left: 22px;
+  top: 68px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:active {
+  opacity: 0.6;
+}
+
+/* ========================================================================
+   主标题 - Figma: left=36px, top=116px, Noto Serif SC, ExtraBold, 45px, white
+   ======================================================================== */
+
+.titleContainer {
+  position: absolute;
+  left: 36px;
+  top: 116px;
+  z-index: 1;
+}
+
+.title {
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-extrabold); /* 800 */
+  font-size: var(--font-size-title-large); /* 45px */
+  line-height: 1; /* leading-none */
+  color: var(--color-text-white); /* white */
+  margin: 0;
+  padding: 0;
+  letter-spacing: -0.45px; /* tracking-[-0.45px] */
+}
+
+/* ========================================================================
+   提示气泡容器 - Figma node 1739:1223 (完整页面 1739:1169)
+   容器水平居中，top=525px，宽度339.777px，高度196.081px
+   输入框 top=766px，容器与输入框间距约45px
+   ======================================================================== */
+
+.promptsContainer {
+  position: absolute;
+  /* 计算: 输入框bottom=34px+50px高度=84px, 容器与输入框间距45px, 容器高度196px */
+  /* 容器bottom = 84 + 45 = 129px（但实际效果需要调整） */
+  /* 使用top定位更精确: 页面高度844px, top=525px */
+  /* 转换为bottom: 844 - 525 - 196 = 123px */
+  bottom: 123px;
+  /* 水平居中: left: calc(50% - 容器宽度/2) */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 339.777px;
+  height: 196.081px;
+  z-index: 1;
+  pointer-events: none; /* 容器不接收点击，子元素可以 */
+}
+
+/* ========================================================================
+   气泡包装器 - 根据 Figma node 1739:1223 的精确定位（使用 left/top）
+   ======================================================================== */
+
+/* 第一个气泡包装器 - Figma: left=112.74px, top=0 (右上角) */
+.bubbleWrapper1 {
+  position: absolute;
+  left: 112.74px;
+  top: 0;
+  width: 191.809px;
+  height: 73.616px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* 第二个气泡包装器 - Figma: left=0, top=54.58px (左侧) */
+.bubbleWrapper2 {
+  position: absolute;
+  left: 0;
+  top: 54.58px;
+  width: 210.813px;
+  height: 106.747px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* 第三个气泡包装器 - Figma: left=157.41px, top=119.95px (右下角) */
+.bubbleWrapper3 {
+  position: absolute;
+  left: 157.41px;
+  top: 119.95px;
+  width: 182.371px;
+  height: 76.131px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* ========================================================================
+   提示气泡基础样式 - 只处理外观和旋转
+   ======================================================================== */
+
+.promptBubble {
+  background-color: var(--color-bg-chat-bubble); /* #fffaf7 */
+  border: 1px solid var(--color-chat-bubble-border); /* rgba(239,136,58,0.2) */
+  border-radius: var(--radius-lg); /* 16px */
+  padding: 12px var(--spacing-lg); /* 12px 16px */
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-semibold); /* 600 */
+  font-size: var(--font-size-xl); /* 18px */
+  line-height: 1.2; /* leading-[1.2] */
+  color: var(--color-text-chat-bubble); /* rgba(25,22,20,0.9) */
+  letter-spacing: -0.09px; /* tracking-[-0.09px] */
+  cursor: pointer;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
+  /* 多层阴影效果 - 从 Figma 设计提取 */
+  box-shadow:
+    0px 304px 85px 0px rgba(164, 99, 157, 0),
+    0px 194px 78px 0px rgba(126, 134, 150, 0.01),
+    0px 109px 66px 0px rgba(162, 192, 170, 0.05),
+    0px 49px 49px 0px rgba(216, 186, 207, 0.09),
+    0px 12px 27px 0px rgba(107, 127, 156, 0.1);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 第一个提示气泡 - 旋转 1.704deg，右上角 */
+.promptBubble1 {
+  width: 189.871px;
+  transform: rotate(1.704deg);
+}
+
+.promptBubble1:hover {
+  opacity: 0.9;
+  transform: rotate(1.704deg) scale(1.02);
+}
+
+.promptBubble1:active {
+  opacity: 0.8;
+  transform: rotate(1.704deg) scale(0.98);
+}
+
+/* 第二个提示气泡 - 旋转 355.202deg = -4.798deg，左侧 */
+.promptBubble2 {
+  width: 204px;
+  transform: rotate(-4.798deg);
+}
+
+.promptBubble2:hover {
+  opacity: 0.9;
+  transform: rotate(-4.798deg) scale(1.02);
+}
+
+.promptBubble2:active {
+  opacity: 0.8;
+  transform: rotate(-4.798deg) scale(0.98);
+}
+
+/* 第三个提示气泡 - 旋转 2.62deg，右下角 */
+.promptBubble3 {
+  width: 179.451px;
+  transform: rotate(2.62deg);
+}
+
+.promptBubble3:hover {
+  opacity: 0.9;
+  transform: rotate(2.62deg) scale(1.02);
+}
+
+.promptBubble3:active {
+  opacity: 0.8;
+  transform: rotate(2.62deg) scale(0.98);
+}
+
+/* ========================================================================
+   底部输入区域 - Figma: bottom=34px
+   ======================================================================== */
+
+.inputContainer {
+  position: absolute;
+  bottom: 34px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md); /* 12px */
+  z-index: 2;
+  max-width: calc(100% - 28px); /* 确保不超出屏幕 */
+  box-sizing: border-box;
+}
+
+/* 添加按钮 - Figma: left=14px, size=50px */
+.addButton {
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-bg-chat-input); /* rgba(241,241,241,0.5) */
+  border: none;
+  border-radius: 25px; /* 50px / 2 = 25px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.addButton:hover {
+  opacity: 0.9;
+}
+
+.addButton:active {
+  opacity: 0.8;
+  transform: scale(0.95);
+}
+
+/* Composer根容器 */
+.composerRoot {
+  flex: 1;
+  position: relative;
+  min-width: 0; /* 防止 flex 子元素溢出 */
+  overflow: hidden;
+}
+
+/* Composer内部容器 - 圆角背景和边框（使用对话页的对话框样式） */
+.composerInner {
+  display: flex;
+  align-items: center;
+  border-radius: 32px; /* rounded-4xl */
+  background-color: #f8f8f8; /* bg-[#f8f8f8] */
+  border: 1px solid #e5e5e5; /* ring-1 ring-[#e5e5e5] */
+  padding: 8px 8px 8px 16px; /* 内部间距 */
+  gap: 8px;
+  min-width: 0; /* 防止溢出 */
+  max-width: 100%; /* 确保不超出父容器 */
+  box-sizing: border-box;
+}
+
+/* 输入框 - 透明背景 */
+.input {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  font-family: var(--font-family-source-han); /* Source Han Serif SC */
+  font-weight: var(--font-weight-regular); /* 400 */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: 22px;
+  color: var(--color-text-primary); /* text-[#0d0d0d] */
+  outline: none;
+  padding: 0;
+  min-width: 0; /* 防止 flex 子元素溢出 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: var(--color-text-primary);
+  opacity: 0.4;
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 操作按钮容器 - 右侧圆形按钮 */
+.actionButtonContainer {
+  position: relative;
+  width: 36px; /* h-9 w-9 = 36px */
+  height: 36px;
+  flex-shrink: 0;
+}
+
+/* 操作按钮 - 基础样式 */
+.actionButton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* rounded-full */
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.actionButton:hover {
+  opacity: 0.9;
+}
+
+.actionButton:active {
+  opacity: 0.8;
+  transform: scale(0.95);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 图标样式 - Figma: width=16.75px, height=19.2px */
+.actionButton img {
+  display: block;
+  width: 16.75px;
+  height: 19.2px;
+  object-fit: contain;
+}
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .titleContainer {
+    top: 60px;
+  }
+
+  .promptsContainer {
+    bottom: 100px;
+  }
+
+  .inputContainer {
+    bottom: 20px;
+  }
+}
+

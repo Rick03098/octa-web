@@ -1,0 +1,128 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距等), Figma设计的精确像素值 */
+/* [OUTPUT] CaptureCompleteView组件的CSS样式, 像素级精确还原Figma设计 */
+/* [POS] 特征层拍摄完成页面的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-white);
+  overflow: hidden;
+  border-radius: 50px; /* Figma: rounded-[50px] */
+}
+
+/* ========================================================================
+   背景渐变 - 使用 Figma 设计中的背景图片
+   ======================================================================== */
+
+.backgroundGradient {
+  position: absolute;
+  top: -11px;
+  left: -166.35px;
+  width: 735.351px;
+  height: 926.83px;
+  /* 使用更深的渐变来模拟背景效果 - 从蓝色过渡到橙色/米色 */
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(150, 200, 240, 0.95) 0%,      /* 更深的蓝色中心 */
+    rgba(170, 210, 250, 0.9) 20%,      /* 深蓝色 */
+    rgba(200, 220, 245, 0.85) 40%,     /* 中蓝色 */
+    rgba(240, 200, 180, 0.8) 60%,      /* 橙色 */
+    rgba(250, 210, 190, 0.75) 80%,     /* 深橙色 */
+    rgba(255, 220, 200, 0.7) 100%      /* 更深的橙色 */
+  );
+  z-index: 0;
+  pointer-events: none;
+  /* 添加模糊效果使渐变更柔和 */
+  filter: blur(40px);
+}
+
+/* ========================================================================
+   毛玻璃覆盖层
+   ======================================================================== */
+
+.glassOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(100px);
+  -webkit-backdrop-filter: blur(100px);
+  background: rgba(255, 255, 255, 0.06); /* Figma: bg-[rgba(255,255,255,0.06)] */
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ========================================================================
+   文本内容
+   ======================================================================== */
+
+.content {
+  position: absolute;
+  top: 230px; /* Figma: top-[230px] */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: auto;
+}
+
+/* 文本内容 - 调整为较小字号，确保两排显示 */
+.text {
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-bold); /* 700 */
+  font-size: 24px; /* 从28px减小到24px，确保两排显示 */
+  line-height: normal; /* Figma: leading-[normal] */
+  color: #FFFFFF; /* 纯白色，确保文字清晰可见 */
+  margin: 0;
+  padding: 0;
+  white-space: pre-line; /* 支持换行，保持 Figma 设计中的换行效果 */
+  text-align: center;
+  /* 移除文字阴影 */
+}
+
+/* ========================================================================
+   Home Indicator
+   ======================================================================== */
+
+.homeIndicator {
+  position: absolute;
+  bottom: 8px; /* Figma: bottom-[8px] */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px; /* Figma: w-[134px] */
+  height: 5px; /* Figma: h-[5px] */
+  background-color: var(--color-white); /* Figma: darkMode=true, 白色 */
+  border-radius: 100px; /* Figma: rounded-[100px] */
+  z-index: 2;
+}
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+/* 移动端优化 */
+@media (max-width: 390px) {
+  .content {
+    padding: 0 20px;
+    width: calc(100% - 40px);
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .content {
+    top: 150px;
+  }
+
+  .homeIndicator {
+    bottom: 20px;
+  }
+}
+

@@ -1,0 +1,85 @@
+/* [INPUT] tailwindcss库, styles/variables.css中的CSS变量, Google Fonts的Noto Serif SC字体 */
+/* [OUTPUT] 全局CSS样式, 包括Tailwind导入、CSS变量导入、字体导入、基础重置样式、移动端优化 */
+/* [POS] 全局样式文件(旧版本), 注意: 新代码应使用styles/index.css, 此文件可能包含Tailwind相关代码 */
+@import "tailwindcss";
+
+/* Import global CSS variables */
+@import './styles/variables.css';
+
+/* 导入 Noto Serif SC 字体，包含所有需要的权重（400, 500, 600, 700, 800） */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* 字体回退方案：优先使用 Noto Serif SC，然后是系统字体，最后是 serif */
+  font-family: 'Noto Serif SC', -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh; /* 动态视口高度 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 移动端优化：防止水平滚动 */
+  overflow-x: hidden;
+  /* 防止移动端缩放 */
+  touch-action: pan-y;
+  /* 确保背景覆盖整个屏幕 */
+  background-color: #faf8f6;
+}
+
+/* 确保根容器支持移动端 */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* 移动端不限制宽度，占满屏幕 */
+  margin: 0;
+  max-width: none;
+}
+
+/* 仅在桌面端限制宽度并居中，同时确保背景覆盖整个屏幕 */
+@media (min-width: 768px) {
+  html, body {
+    /* 桌面端背景色与页面一致，避免出现边界线 */
+    background: linear-gradient(180deg, #fffcf9 0%, #f0f8f4 50%, #e8f4fc 100%);
+  }
+  
+  #root {
+    max-width: 390px;
+    margin: 0 auto;
+    /* 添加阴影使其看起来像手机屏幕 */
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: calc(100vh - 40px);
+  }
+}
+
+/* 移动端优化 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* 隐藏滚动条但保持滚动功能 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

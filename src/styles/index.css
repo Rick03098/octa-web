@@ -1,0 +1,90 @@
+/* [INPUT] styles/variables.css中定义的设计令牌, 全局基础样式需求 */
+/* [OUTPUT] 全局CSS样式, 包括CSS变量导入、重置样式、基础样式 */
+/* [POS] 设计系统层的全局样式入口文件, 导入变量并定义全局基础样式 */
+
+@import './variables.css';
+
+/* ========================================================================
+   全局重置和基础样式
+   ======================================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================================================
+   移动端优化
+   ======================================================================== */
+
+/* 禁止文本选择（移动端优化，某些UI元素不需要选择） */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* 触摸反馈优化 */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ========================================================================
+   工具类
+   ======================================================================== */
+
+/* 隐藏滚动条但保持滚动功能 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 文本省略 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 多行文本省略 */
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-ellipsis-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+

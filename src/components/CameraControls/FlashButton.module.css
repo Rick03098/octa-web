@@ -1,0 +1,39 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色等), Figma设计的精确像素值 */
+/* [OUTPUT] FlashButton组件的CSS样式, 精确还原Figma Component 5设计 */
+/* [POS] 组件层相机控制的样式文件, 为FlashButton组件提供样式定义 */
+
+.flashButton {
+  width: 44.445px;
+  height: 44.445px;
+  background: transparent; /* 透明背景 */
+  border: 1.5px solid var(--color-white); /* 细白色边框 */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.flashButton:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.flashButton:active {
+  transform: scale(0.95);
+}
+
+.flashEnabled {
+  /* 启用状态保持透明背景 */
+  background: transparent;
+}
+
+.flashIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+

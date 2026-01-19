@@ -1,0 +1,166 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、字体、间距等), Figma设计的精确像素值 */
+/* [OUTPUT] PreviewView组件的CSS样式, 像素级精确还原Figma设计 */
+/* [POS] 特征层预览页面的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量 */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* 动态视口高度，适配移动端浏览器工具栏 */
+  background-color: var(--color-bg-name-entry); /* #fffcf9 */
+  overflow: hidden;
+}
+
+/* ========================================================================
+   背景渐变 - 使用 CSS 渐变实现蓝绿色模糊效果
+   参考 Figma: top=221px, 居中偏下位置
+   ======================================================================== */
+
+.gradientContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* 使用多层径向渐变模拟 Figma 的渐变效果 */
+  background: 
+    /* 蓝色渐变 - 右侧 */
+    radial-gradient(
+      ellipse 80% 60% at 85% 55%,
+      rgba(166, 214, 252, 0.5) 0%,
+      rgba(199, 235, 255, 0.3) 40%,
+      transparent 70%
+    ),
+    /* 绿色渐变 - 左侧 */
+    radial-gradient(
+      ellipse 80% 60% at 15% 50%,
+      rgba(194, 240, 219, 0.5) 0%,
+      rgba(194, 240, 219, 0.3) 40%,
+      transparent 70%
+    ),
+    /* 基础背景色 */
+    var(--color-bg-name-entry);
+}
+
+/* 隐藏图片（使用 CSS 渐变替代） */
+.gradientImage {
+  display: none;
+}
+
+/* ========================================================================
+   关键词文本 - 分散在页面上，若隐若现效果
+   ======================================================================== */
+
+.keyword {
+  position: absolute;
+  width: 290px; /* Figma: width=290px */
+  height: 55px; /* Figma: height=55px */
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-light); /* 300 - Light */
+  font-size: var(--font-size-md); /* 16px */
+  line-height: normal; /* Figma: leading-[0] */
+  color: var(--color-text-preview-keyword); /* rgba(89,171,150,0.99) */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%); /* 中心对齐 */
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  /* 若隐若现动画效果 */
+  animation: fadeInOut 4s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+/* 为每个关键词设置不同的动画延迟，产生错落的若隐若现效果 */
+.keyword:nth-child(2) { animation-delay: 0s; }
+.keyword:nth-child(3) { animation-delay: 0.8s; }
+.keyword:nth-child(4) { animation-delay: 1.6s; }
+.keyword:nth-child(5) { animation-delay: 2.4s; }
+.keyword:nth-child(6) { animation-delay: 3.2s; }
+
+/* 若隐若现动画关键帧 */
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.2;
+    filter: blur(1px);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(0);
+  }
+}
+
+/* ========================================================================
+   "开启"按钮 - Figma: top=630px, left=142px, width=110px, height=55px, 中心点在 197px
+   ======================================================================== */
+
+.openButton {
+  position: absolute;
+  top: 630px; /* Figma: top=630px */
+  left: 142px; /* Figma: left=142px */
+  width: 110px; /* Figma: width=110px */
+  height: 55px; /* Figma: height=55px */
+  background-color: var(--color-white); /* 白色背景 */
+  border: none;
+  border-radius: var(--radius-preview-button); /* 63px */
+  font-family: var(--font-family-serif); /* Noto Serif SC */
+  font-weight: var(--font-weight-medium); /* 500 - Medium */
+  font-size: var(--font-size-lg); /* 17px */
+  line-height: normal;
+  color: var(--color-black);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--shadow-button);
+}
+
+.openButton:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.openButton:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ========================================================================
+   响应式适配
+   ======================================================================== */
+
+/* 移动端优化 */
+@media (max-width: 390px) {
+  .keyword {
+    width: 250px; /* 在小屏幕上稍微缩小 */
+  }
+
+  .openButton {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .keyword {
+    font-size: var(--font-size-sm); /* 14px */
+  }
+
+  .openButton {
+    top: auto;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+

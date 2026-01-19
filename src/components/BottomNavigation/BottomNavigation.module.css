@@ -1,0 +1,55 @@
+/* [INPUT] styles/variables.css中的CSS变量 */
+/* [OUTPUT] BottomNavigation组件的样式, 定义底部导航栏的布局和交互效果 */
+/* [POS] 可复用组件的样式文件, 提供主界面底部导航的视觉设计 */
+
+.container {
+  position: absolute;
+  bottom: 200px; /* 向上移动，使按钮位置更高 */
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  z-index: 10;
+}
+
+/* 添加按钮（中间的圆形按钮） */
+.addButton {
+  width: 58px;
+  height: 58px;
+  background-color: var(--color-white);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.addButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.addButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.addIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 安全区域适配（iPhone X 及以后） */
+@supports (padding: max(0px)) {
+  .container {
+    padding-bottom: max(21px, env(safe-area-inset-bottom));
+  }
+}
+

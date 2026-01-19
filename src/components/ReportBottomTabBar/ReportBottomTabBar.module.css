@@ -1,0 +1,106 @@
+/* [INPUT] styles/variables.css中的CSS变量(颜色、间距等), Figma设计的精确像素值 */
+/* [OUTPUT] ReportBottomTabBar组件的CSS样式, 像素级精确还原Figma设计 */
+/* [POS] 组件层报告底部导航的样式文件, 使用绝对定位精确实现Figma布局, 所有颜色引用CSS变量 */
+
+.container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 390px; /* 匹配 AppShell 的最大宽度 */
+  margin: 0 auto;
+  height: 81px; /* Figma: Component 3 高度 */
+  z-index: 10;
+}
+
+/* 白色背景 */
+.background {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-white);
+  z-index: 0;
+}
+
+/* 图标容器 - 使用 flexbox 水平居中排列 */
+.iconsWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px; /* 图标之间的间距，参考 Figma 设计 */
+  z-index: 1;
+}
+
+/* 星形图标 - 居中 */
+.starContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* 收藏图标 - 左侧 */
+.bookmarkButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bookmarkButton:hover {
+  opacity: 0.7;
+}
+
+.bookmarkButton:active {
+  opacity: 0.5;
+}
+
+/* 分享图标 - 右侧 */
+.shareButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shareButton:hover {
+  opacity: 0.7;
+}
+
+.shareButton:active {
+  opacity: 0.5;
+}
+
+/* 图标样式 - elements.svg 是 17x21, share.svg 是 19x21，统一高度为 21px */
+.icon {
+  width: auto;
+  height: 21px;
+  display: block;
+}
+
+/* 星形图标样式 - Star 1.svg 是 33x30，调整为与其他图标视觉协调的尺寸 */
+.starIcon {
+  width: auto;
+  height: 24px; /* Star 1.svg 原始是 30px，略微缩小以与其他图标协调但保持视觉平衡 */
+  display: block;
+}
+
+/* 移动端优化 */
+@media (max-width: 390px) {
+  .container {
+    width: 100%;
+  }
+}
+
